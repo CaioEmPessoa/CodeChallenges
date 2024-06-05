@@ -50,6 +50,6 @@ int main() {
 
         partidas--;
     }
-    std::cout << "\nPontuação Total: \n Jogador UM:" << score_one << " \n Jogador DOIS:" << score_two <<" \n" << 
-                 "Vencedor mestre: " << ((score_one > score_two) ? "Jogador UM !!" : "Jogador DOIS !!");
+    std::cout << "\nPontuação Total\n" << "UM | DOIS:\n " << score_one << " | " << score_two << 
+                 "\n\nVencedor mestre: " << ((score_one > score_two) ? "Jogador UM !!" : "Jogador DOIS !!");
 }
