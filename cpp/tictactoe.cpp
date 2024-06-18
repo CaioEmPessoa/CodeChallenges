@@ -66,7 +66,6 @@ int main() {
         else {
             table[ins_y][ins_x] = '['+ins+']';
         }
-
         if (partida%2!=0) {
             showTable(table);
         }
