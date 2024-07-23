@@ -6,6 +6,7 @@ You may assume that each input would have exactly one solution, and you may not 
 You can return the answer in any order.
 
 ## This code could be REALLY polished.
+## And I just read that the code ALWAYS have a correct solution, when I tought it wanted the closest possible sum...
 '''
 
 class Solution(object):
