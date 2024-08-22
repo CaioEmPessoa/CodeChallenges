@@ -31,7 +31,7 @@ for cpf in cpfs:
         aparece_em_dois.append(cpf)
 
 """
-pares = [
+pares =
     esportes['judo'] & esportes['surf'],
     esportes['judo'] & esportes['vôlei'],
     esportes['judo'] & esportes['ginastica'],
@@ -50,8 +50,10 @@ for cpf in cpfs:
             
 print(len(aparece_em_dois_dois))
 """
+pares = (esportes['judo'] & esportes['surf']) | (esportes['judo'] & esportes['vôlei']) | (esportes['judo'] & esportes['ginastica']) | (esportes['surf'] & esportes['vôlei']) | (esportes['surf'] & esportes['ginastica']) | (esportes['vôlei'] & esportes['ginastica'])
 
 print(f"Judo ou surf: {len(esportes["judo"] | esportes["surf"])}%")
 print(f"Pelo menos dois: {len(aparece_em_dois)}%")
+print(f"Pelo menos dois: {len(pares)}%")
 print(f"Todos os esportes: {len(esportes['ginastica'] & esportes['surf'] & esportes['vôlei'] & esportes['judo'])}%")
 print(f"Nenhum esporte: {len(cpfs - esportes['ginastica'] & esportes['surf'] & esportes['vôlei'] & esportes['judo'])}%")
