@@ -11,3 +11,4 @@ for i in reversed(range(0, 8)):
         num_bin.append("0")
 
 print("".join(num_bin))
+input()
