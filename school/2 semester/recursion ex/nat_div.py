@@ -1,14 +1,10 @@
+list = []
 def div(num1, num2):
-    try:
-        count += 1
-    except:
-        count = 0
+    list.append(num1)
 
     if num1 < num2:
-        return count
+        return len(list)-1
     
-    print(num1)
-
     return div(num1 - num2, num2)
 
-print(div(6, 3))
+print(div(9, 3))
