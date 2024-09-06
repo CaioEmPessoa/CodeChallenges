@@ -1,11 +1,10 @@
-lista = []
-def num_it(num):
-    lista.append(" ")
-    if num <= 1:
-        return len(lista)
-    if num%2==0:
-        return num_it(num/2)
-    else:
-        return num_it((num*3)+1)
+def funcao(x):
+    if x%2==0: return x/2
+    
+    return  3*x+1
 
-print(num_it(100))
+def num_it(n):
+    if funcao(n)==1: return 1
+    
+    return 1+num_it(funcao(n))
+
