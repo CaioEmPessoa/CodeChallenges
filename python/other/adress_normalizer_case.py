@@ -12,22 +12,21 @@ class Normalize():
         # Numero no começo
         elif adress[0].isdigit():
             split_num = len(adress.split(" ")[0])
-            number = adress[:split_num]
             adress_name = adress[split_num+1:]
+            number = adress[:split_num]
             
             # Número com virgula
             if number[-1] == ",":
                 number = number[:-1]
 
         # Número no final ou número junto de bloco
-        # adicionado o split >= 2 por que retornaria erro caso contrário
-        elif len(adress.split(" ")) >= 2 and (adress.split(" ")[-1].isdigit() or adress.split(" ")[-1][0].isdigit()):
+        elif adress.split(" ")[-1][0].isdigit():
             split_num = -len(adress.split(" ")[-1])
             adress_name = adress[:split_num-1]
             number = adress[split_num:]
 
         # Número e Bloco separados por espaço
-        elif len(adress.split(" ")) >= 3 and adress.split(" ")[-2].isdigit():
+        elif adress.split(" ")[-2].isdigit():
             split_num = adress.index(adress.split(" ")[-2])
             adress_name = adress[:split_num-1]
             number = adress[split_num:]
