@@ -7,6 +7,25 @@ def save_data(data:any, r_id:str):
         to_write = f"[\n    {",\n    ".join(data)}\n]"
         write_file.write(to_write)
 
+def bin_search(g_info:dict, value:int, minmax:tuple=False) -> int:
+    # so the first call don't need to specify size of list
+    if minmax == False:
+        minmax = (0, len(g_info)-1)
+    
+    g_list = [g_info[g] for g in g_info]
+    s_list = [r for r in g_info]
+    min, max = minmax
+
+    mid = (min + max) // 2
+
+    if value == g_list[mid]:
+        return value, mid
+    
+    elif value > g_list[mid]:
+        return bin_search(s_list[mid], value, (mid, max))
+    
+    elif value < g_list[mid]:
+        return bin_search(s_list[mid], value, (min, mid))
 
 def quick_sort(g_info:dict) -> dict:
 
@@ -45,7 +64,7 @@ def normalize_data(g_info: dict) -> dict:
         for grade in g_info[s]:
             try:
                 grade_sum_info[s] += grade
-            except: # it says that its required to do that on the requirements
+            except: # it says that its required to do that CHECK
                 grade_sum_info[s] += int(grade)
 
     return grade_sum_info
@@ -64,9 +83,13 @@ alunos = {'000': [65, 68, 1, 50, 34, 88],
 
 g_info = normalize_data(alunos)
 q_sort = quick_sort(g_info)
+bin_s = bin_search(q_sort, 306)
 
+print("\n     ######## ORIGINAL INFO ########       \n")
 print(alunos)
+print("\n     ######## SORTED INFO ########     \n")
 print(dumps(q_sort, indent=4))
-print("fim")
-
+print("\n     ######## BIN_SEARCH RESULT ########       \n")
+print(bin_s)
+print("\n     ######## END ########       \n")
 
