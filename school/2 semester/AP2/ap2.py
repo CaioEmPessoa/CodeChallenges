@@ -1,7 +1,12 @@
 from json import dumps
 
-def bin_search(g_info:dict, value:int) -> int:
-    pass
+RA = "2400540"
+
+def save_data(data:any, r_id:str):
+    with open(f"{RA}_resp_{r_id}.txt", "w") as write_file:
+        to_write = f"[\n    {",\n    ".join(data)}\n]"
+        write_file.write(to_write)
+
 
 def quick_sort(g_info:dict) -> dict:
 
@@ -45,6 +50,7 @@ def normalize_data(g_info: dict) -> dict:
 
     return grade_sum_info
 
+
 alunos = {'000': [65, 68, 1, 50, 34, 88],
           '001': [100, 11, 54, 45, 96, 6],
           '002': [56, '13', 1, 7, 19, 20],
@@ -58,7 +64,6 @@ alunos = {'000': [65, 68, 1, 50, 34, 88],
 
 g_info = normalize_data(alunos)
 q_sort = quick_sort(g_info)
-
 
 print(alunos)
 print(dumps(q_sort, indent=4))
