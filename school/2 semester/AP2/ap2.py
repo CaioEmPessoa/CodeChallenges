@@ -11,7 +11,7 @@ def bin_search(g_info:dict, value:int, minmax:tuple=False) -> int:
     # so the first call don't need to specify size of list
     if minmax == False:
         minmax = (0, len(g_info)-1)
-    
+
     g_list = [g_info[g] for g in g_info]
     s_list = [r for r in g_info]
     min, max = minmax
@@ -19,13 +19,13 @@ def bin_search(g_info:dict, value:int, minmax:tuple=False) -> int:
     mid = (min + max) // 2
 
     if value == g_list[mid]:
-        return value, mid
+        return s_list[mid], mid
     
-    elif value > g_list[mid]:
-        return bin_search(s_list[mid], value, (mid, max))
+    elif g_list[mid] > value :
+        return bin_search(g_info, value, (mid, max))
     
-    elif value < g_list[mid]:
-        return bin_search(s_list[mid], value, (min, mid))
+    elif g_list[mid] < value :
+        return bin_search(g_info, value, (min, mid))
 
 def quick_sort(g_info:dict) -> dict:
 
@@ -71,17 +71,26 @@ def normalize_data(g_info: dict) -> dict:
 
 
 s_info_list = [{
-        '000': [65, 68, 1, 50, 34, 88],
-        '001': [100, 11, 54, 45, 96, 6],
-        '002': [56, '13', 1, 7, 19, 20],
-        '003': [22, 9, 22, 87, 44, 65],
-        '004': [98, 76, 24, 56, '54', 43],
-        '005': [18, 73, 95, 29, 31, 8],
-        '006': [94, '78', 14, 72, 46, 29],
-        '007': [50, 96, 71, 53, 83, 100],
-        '008': [83, 28, 19, 25, 4, 82],
-        '009': [9, 67, 65, 90, 6, 8]
-        },
+        '000': [95, 16, 19, 44, 90, 67],
+        '001': [21, 20, 27, 40, 84, 41],
+        '002': [94, '16', 27, 97, 75, 32],
+        '003': [79, 58, '1', 63, 88, 20],
+        '004': [65, 74, 65, 7, '95', 70],
+        '005': [73, 92, 77, 98, '73', 71],
+        '006': [18, 70, 25, 5, 65, 83],
+        '007': [31, 86, 42, '73', 42, 34],
+        '008': [81, 46, '73', 84, 31, 82],
+        '009': [21, 90, 15, 62, '13', 2],
+        '010': [5, 16, 47, 19, '96', 19],
+        '011': [74, 70, 74, 30, 61, '60'],
+        '012': [70, 36, 24, 53, 17, 16],
+        '013': [62, 58, 8, 82, 38, 57],
+        '014': [32, 58, 81, 87, 64, 53],
+        '015': [48, 60, 78, 12, 79, 5],
+        '016': [73, 45, 9, 12, 39, 31],
+        '017': [5, 54, 89, 60, 35, 56],
+        '018': [23, 76, 44, 67, 19, 13],
+        '019': ['77', 61, 97, 19, 37, 55]},
         {
         '000': [99, 54, 76, 7, 46, 79],
         '001': [61, 92, 58, 92, 29, '8'],
@@ -104,18 +113,21 @@ s_info_list = [{
         '018': [12, 39, 51, 83, 68, '96'],
         '019': [26, 10, 33, 54, 36, 30]
         }
-          ]
+    ]
 
-
+s_info_id = 1
 for s_info in s_info_list:
     g_info = normalize_data(s_info)
     q_sort = quick_sort(g_info)
-    bin_s = bin_search(q_sort, 306)
+    bin_s = bin_search(q_sort, q_sort['001'])
 
     q_sort_s_list = [s for s in q_sort]
 
-    save_data(q_sort, RA)
+    save_data(q_sort, s_info_id)
+    s_info_id += 1
+    print("\n\n")
 
+'''
 print("\n     ######## ORIGINAL INFO ########       \n")
 print(alunos)
 print("\n     ######## SORTED INFO ########     \n")
@@ -123,4 +135,5 @@ print(dumps(q_sort, indent=4))
 print("\n     ######## BIN_SEARCH RESULT ########       \n")
 print(bin_s)
 print("\n     ######## END ########       \n")
+'''
 
