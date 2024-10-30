@@ -1,21 +1,39 @@
-def quick_sort(g_list:list):
+from json import dumps
 
-    if len(g_list) <= 1:
-        return g_list
+def bin_search(g_info:dict, value:int) -> int:
+    pass
 
-    pyvot = g_list[len(g_list)-1]
-    smaller = [pyvot]
-    bigger = []
+def quick_sort(g_info:dict) -> dict:
 
-    for i in g_list:
-        if pyvot > i:
-            smaller.append(i)
-        if pyvot < i:
-            bigger.append(i)
+    if len(g_info) <= 1:
+        return g_info
 
-    return quick_sort(bigger) + quick_sort(smaller)
+    g_list = [g_info[r] for r in g_info]
+    s_list = [r for r in g_info]
 
-def normalize_data(g_info:dict):
+    pyvot_g = g_list[len(g_list)-1]
+    pyvot_s = s_list[len(g_list)-1]
+    
+    smaller = {}
+    smaller[pyvot_s] = pyvot_g
+
+    bigger = {}
+
+
+    i = 0
+    while i < len(g_list):
+
+        if pyvot_g > g_list[i]:
+            smaller[s_list[i]] = g_list[i]
+        
+        if pyvot_g < g_list[i]:
+            bigger[s_list[i]] = g_list[i]
+        
+        i+=1
+
+    return quick_sort(bigger) | quick_sort(smaller)
+
+def normalize_data(g_info: dict) -> dict:
     grade_sum_info = {}
     for s in g_info:
         grade_sum_info[s] = 0 # kinda ungly
@@ -24,10 +42,8 @@ def normalize_data(g_info:dict):
                 grade_sum_info[s] += grade
             except: # it says that its required to do that on the requirements
                 grade_sum_info[s] += int(grade)
-    
-    grade_sum_list = [grade_sum_info[r] for r in grade_sum_info]
 
-    return grade_sum_info, grade_sum_list
+    return grade_sum_info
 
 alunos = {'000': [65, 68, 1, 50, 34, 88],
           '001': [100, 11, 54, 45, 96, 6],
@@ -40,8 +56,12 @@ alunos = {'000': [65, 68, 1, 50, 34, 88],
           '008': [83, 28, 19, 25, 4, 82],
           '009': [9, 67, 65, 90, 6, 8]}
 
-g_info, g_list = normalize_data(alunos)
-q_sort = quick_sort(g_list)
-print(q_sort)
+g_info = normalize_data(alunos)
+q_sort = quick_sort(g_info)
+
+
+print(alunos)
+print(dumps(q_sort, indent=4))
+print("fim")
 
 
