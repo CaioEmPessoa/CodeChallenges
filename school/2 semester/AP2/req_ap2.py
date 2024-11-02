@@ -4,25 +4,27 @@ RA = "2400540"
 
 def save_data(data:any, r_id:str):
     with open(f"{RA}_resp_{r_id}.txt", "w") as write_file:
-        arquivo.write('\n'.join(data))
+        write_file.write('\n'.join(data))
 
-def bin_search(g_list:list, value:int, minmax:tuple=False) -> int:
+def bin_search(g_list:list, value:int, minmax:tuple=False) -> tuple:
     # so the first call don't need to specify size of list
     if minmax == False:
-        minmax = (0, len(g_info)-1)
+        minmax = (0, len(g_list)-1)
 
     min, max = minmax
 
-    mid = (min + max) // 2
+    if min > max:
+        return -1, -1
 
+    mid = (min + max) // 2
     if value == g_list[mid]:
-        return s_list[mid], mid
+        return g_list[mid], mid
     
-    elif g_list[mid] > value :
-        return bin_search(g_info, value, (mid, max))
+    elif g_list[mid] > value:
+        return bin_search(g_list, value, (min, mid - 1))
     
-    elif g_list[mid] < value :
-        return bin_search(g_info, value, (min, mid))
+    else:
+        return bin_search(g_list, value, (mid + 1, max))
 
 def quick_sort(g_list:list) -> list:
 
@@ -50,8 +52,8 @@ def organize_data(g_org_list:list, g_info:dict) -> dict:
     s_org_list = len(g_org_list) * [None]
 
     for i in g_org_list:
-        sid = bin_search(g_desorg_list, i)
-        s_org_list[sid] = f"{sid:3}"
+        s_id, s_index = bin_search(g_desorg_list, i)
+        s_org_list[s_index] = f"00{s_index}"
 
     return s_org_list
 
@@ -123,7 +125,6 @@ for s_info in s_info_list:
     print(organized)
 
     exit()
-    bin_s = bin_search(q_sort, q_sort['001'])
 
     q_sort_s_list = [s for s in q_sort]
 
