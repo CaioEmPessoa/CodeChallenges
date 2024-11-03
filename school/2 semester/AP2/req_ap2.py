@@ -49,12 +49,11 @@ def quick_sort(g_list:list) -> list:
 def organize_data(g_org_list:list, g_info:dict) -> dict:
     
     g_desorg_list = [g_info[g] for g in g_info]
-    s_org_list = []
+    s_org_list = [None]*(len(g_info))
 
-    for i in g_org_list:
-        b_s = bin_search(g_org_list, i)
-        s_index = b_s if b_s != -1 else "No"
-        s_org_list.append(s_index)
+    for i in g_desorg_list:
+        s_index = bin_search(g_org_list, i)
+        s_org_list[s_index] = f"{s_index:03}"
 
     return s_org_list
 
@@ -118,20 +117,16 @@ s_info_list = [{
         }
     ]
 
-s_info_id = 1
+s_info_id = 20
 for s_info in s_info_list:
+
     g_info, g_list = normalize_data(s_info)
     q_sort = quick_sort(g_list)
     organized = organize_data(q_sort, g_info)
-    print(organized)
+    save_data(organized, s_info_id)
 
-    exit()
+    s_info_id += 5
 
-    q_sort_s_list = [s for s in q_sort]
-
-    save_data(q_sort, s_info_id)
-    s_info_id += 1
-    print("\n\n")
 
 '''
 print("\n     ######## ORIGINAL INFO ########       \n")
