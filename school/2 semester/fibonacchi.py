@@ -61,3 +61,11 @@ plt.grid(True)
 
 plt.show()
 
+
+'''
+
+O primeiro algorítimo iterativo é  O(n)
+O segundo algorítimo de recursividade é O^n
+O terceiro algorítimo, com memízação é apenas O(1)
+
+'''
