@@ -1,3 +1,5 @@
+package com.dinheiroseguro.contas;
+
 public class Banco {
 
     private String numero;
@@ -31,17 +33,23 @@ public class Banco {
     
     public static void main(String[] args) {
 
-        Banco contaGab = new Banco("23456-78", "Gabriel", 1000);
-        Banco contaDoc = new Banco("666-13", "Mudroc", 66666);
+        Banco contas[] = new Banco[1000];
+
+        contas[0] = new Banco("23456-78", "Gabriel", 1000);
+        contas[666] = new Banco("666-13", "Mudroc", 66666);
+
+        UtilitarioContas uc = new UtilitarioContas();
+        
+        
 
         System.out.println("----------  CONTA GABRIEL  ----------");
-        System.out.println("Saldo atual é de: " + contaGab.getSaldo());
-        System.out.println(contaGab.getSaldo());
+        System.out.println("Saldo atual é de: " + contas[0].getSaldo());
+        System.out.println(contas[0].getSaldo());
 
         System.out.println("Debitando R$100...");
-        contaGab.debitar(100);
+        contas[0].debitar(100);
 
-        System.out.println("Total da conta:" + contaGab.getSaldo());
+        System.out.println("Total da conta:" + contas[0].getSaldo());
 
         System.out.println("\n\n");
 
@@ -49,16 +57,16 @@ public class Banco {
 
         final float valorCreditar = 9999;
         System.out.println("INFORMACOES DA CONTA:");
-        System.out.println("NUMERO DA CONTA:" + contaDoc.getNumero());
-        System.out.println("NOME DA CONTA:" + contaDoc.getNome());
-        System.out.println("SALDO ATUAL: R$" + contaDoc.getSaldo());
+        System.out.println("NUMERO DA CONTA:" + contas[666].getNumero());
+        System.out.println("NOME DA CONTA:" + contas[666].getNome());
+        System.out.println("SALDO ATUAL: R$" + contas[666].getSaldo());
 
         System.out.println("\n-----------------------\n");
 
         System.out.println("Creditando conta no valor de " + valorCreditar + " por que ele merece ;)");
-        contaDoc.creditar(valorCreditar);
+        contas[666].creditar(valorCreditar);
 
-        System.out.println("SALDO NOVO: R$" + contaDoc.getSaldo());
+        System.out.println("SALDO NOVO: R$" + contas[666].getSaldo());
         
     }
 }
