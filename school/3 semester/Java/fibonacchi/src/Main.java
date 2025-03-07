@@ -8,7 +8,7 @@ public class Main {
         int fib1 = 0;
         int fib2 = 1;
         int fib = 0;
-
+        
         System.out.print("Qual tamanho da sequencia desejada?");
         int tamSeq = scan.nextInt();
 
