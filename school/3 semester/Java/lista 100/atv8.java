@@ -17,6 +17,7 @@ public class atv8 {
         System.out.println((num*100)+ "cm");
         System.out.println((num*1000)+ "mm");
 
+        s.close();
     }
 
 }

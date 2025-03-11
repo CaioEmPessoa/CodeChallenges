@@ -12,8 +12,6 @@ public class atv7 {
         System.out.println("Dobro: " + (num*2));
         System.out.println("Terça parte: " + (num/3));
 
+        s.close();
     }
-
-
-
 }

@@ -12,5 +12,6 @@ public class atv5 {
 
         System.out.println();
 
+        s.close();
     }
 }

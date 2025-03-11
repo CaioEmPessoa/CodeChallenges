@@ -13,6 +13,7 @@ public class atv9 {
 
         System.out.println("$" + formatNum);
 
+        s.close();
     }
 
 }
