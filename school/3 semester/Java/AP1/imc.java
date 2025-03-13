@@ -8,7 +8,7 @@ public class imc {
         double peso = s.nextFloat();
         double altura = s.nextFloat();
 
-        double imc = peso/Math.pow(altura, 2);
+        double imc = peso/(Math.pow(altura, 2));
 
         System.out.println(imc);
 
