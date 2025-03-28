@@ -1,0 +1,35 @@
+EXERCICIO 1 - Fahrenheit para Celsius:
+1 - Solicita ao usuário o valor dos graus em fahrenheit
+2 - Salvar este valor numa variável decimal
+3 - Faz a conversão do fahrenheit para celsius, subtraindo 32 e multiplicando o valor resultante por 5/9
+4 - Exibe ao usuário o valor em celsius
+
+EXERCICIO 2 - Celsius para Fahrenheit:
+1 - Solicita ao usuário o valor dos graus em celsius
+2 - Salvar este valor numa variável decimal
+3 - Faz a conversão de celsius para fahrenheit, multiplicando por  9/5 e adicionando 32 ao valor
+4 - Exibe ao usuário o valor em celsius
+
+EXERCICIO 3 - IMC:
+1 - Pede ao usuário os dados de sua altura e peso
+2 - Armazena estes valores em variáveis decimais
+3 - Divida o peso pela altura elevado a dois
+4 - Exibe o IMC do usuário
+
+EXERCICIO 4 - Eleva Número
+1 - Pede ao usuário um valor numérico
+2 - Armazena este valor em uma variável decimal
+3 - Exibe o valor do número elevado a dois
+4 - Exibe o valor do número elevado a tres
+
+EXERCICIO 5 - Calcular Area Triangulo
+1 - Pede ao usuário o valor da base e altura do triângulo
+2 - Armazena estes valores em variáveis decimais
+3 - Calcula a área do triângulo, multiplicando a base pela altura e dividindo esse resultado por dois
+4 - Exibe o resultado do cálculo pro usuário
+
+EXERCICIO 6 - Calcular o Delta de uma Equação do 2 Grau:
+1 - Pede ao usuário os valores de A, B e C da equação
+2 - Armazena estes valores em variáveis decimais
+3 - Faz o cálculo de B elevado a B, depois o cálculo de -4*a*c, e soma estes dois valores.
+4 - Exibe o resultado do cálculo pro usuário
