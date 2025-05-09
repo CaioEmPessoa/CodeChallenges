@@ -1,3 +1,10 @@
+/*
+
+    Faça um programa que leia as duas notas de um aluno em uma
+    matéria e mostre na tela a sua média na disciplina.
+
+*/
+
 import java.util.Scanner;
 
 public class atv5 {
