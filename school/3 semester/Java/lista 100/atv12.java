@@ -1,34 +1,27 @@
-
 /*
 
-    Crie um programa que leia o preço de um produto, calcule e
-    mostre o seu PREÇO PROMOCIONAL, com 5% de desconto.
+    Faça um algoritmo que leia o salário de um funcionário,
+    calcule e mostre o seu novo salário, com 15% de aumento.
 
 */
 
 import java.util.Scanner;
-import java.math.*;
 
-public class atv11 {
+public class atv12 {
     public static void main(String[] args) {
         
         Scanner s = new Scanner(System.in);
+        System.out.println("Insira valor do produto:");
+        double preco = s.nextFloat();
         
-        // 1 litro = 2x2
+        System.out.println("Insira valor do desconto:");
+        double desconto = s.nextFloat();
 
-        System.out.println("Insira os 3 valores para calcular bhaskara, separados por enter.:");
-        double numA = s.nextFloat();
-        double numB = s.nextFloat();
-        double numC = s.nextFloat();
+        desconto = Math.abs((desconto-100)/100);
 
-        double delta = Math.pow(numB*numB - 4*numA*numC, 0.5);
-        double x1 = (delta-numB)/(2*numA);
-        double x2 = (delta+numB)/(2*numA);
+        System.out.println("Preco final: R$" + preco*desconto );
 
-        System.out.println("Delta = " + delta);
-        System.out.println("X' = " + x1);
-        System.out.println("X'' = " + x2);
-
+        s.close();
     }
 
 }

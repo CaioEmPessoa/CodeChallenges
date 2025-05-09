@@ -19,5 +19,6 @@ public class atv3 {
 
         System.out.println("O(a) funcionário(a) " + nome + " possui um valor de R$" + salario + " de salário.");
 
+        s.close();
     }
 }

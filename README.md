@@ -1,2 +1,2 @@
 # CodeChallenges
-A collection of activities I had to do for college on Beecrowd or other training exercises on Leetcode.
+A collection of general coding exercises I had to do for college, job interviews, independent study of just for fun!

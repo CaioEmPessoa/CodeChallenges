@@ -19,5 +19,6 @@ public class atv6 {
         System.out.println("Anterior: " + (num-1));
         System.out.println("Posterior: " + (num+1));
 
+        s.close();
     }
 }

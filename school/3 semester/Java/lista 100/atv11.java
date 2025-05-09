@@ -1,34 +1,31 @@
-
 /*
 
-    Desenvolva uma lógica que leia os valores de A, B e C de
-    uma equação do segundo grau e mostre o valor de Delta. // fiz a mais pq amo bhaskara
+Desenvolva uma lógica que leia os valores de A, B e C de
+uma equação do segundo grau e mostre o valor de Delta.
 
 */
 
 import java.util.Scanner;
-import java.math.*;
 
 public class atv11 {
     public static void main(String[] args) {
         
         Scanner s = new Scanner(System.in);
-        
-        // 1 litro = 2x2
+        System.out.println("Calculadora de bhaskara!\n Insira o valor de A, B e C. Respectivamente.");
 
-        System.out.println("Insira os 3 valores para calcular bhaskara, separados por enter.:");
         double numA = s.nextFloat();
         double numB = s.nextFloat();
         double numC = s.nextFloat();
 
-        double delta = Math.pow(numB*numB - 4*numA*numC, 0.5);
-        double x1 = (delta-numB)/(2*numA);
-        double x2 = (delta+numB)/(2*numA);
+        double delta = (numB*numB - 4*numA*numC);
 
-        System.out.println("Delta = " + delta);
-        System.out.println("X' = " + x1);
-        System.out.println("X'' = " + x2);
+        double x1 = (-numB + Math.pow(delta, 0.5)) / (2 * numA);
+        double x2 = (-numB - Math.pow(delta, 0.5)) / (2 * numA);
 
+        System.out.println("Δ=" + delta);
+        System.out.println("x'=" + x1 + " " + "x''=" + x2);
+
+        s.close();
     }
 
 }
