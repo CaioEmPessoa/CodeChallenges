@@ -1,3 +1,11 @@
+
+/*
+
+    Faça um programa que leia um número inteiro e mostre o seu
+    antecessor e seu sucessor.
+
+*/
+
 import java.util.Scanner;
 
 public class atv6 {

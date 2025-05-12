@@ -1,3 +1,10 @@
+/*
+
+    Crie um programa que leia o nome e o salário de um funcionário,
+    mostrando no final uma mensagem.
+    
+*/
+
 import java.util.Scanner;
 
 public class atv3 {
