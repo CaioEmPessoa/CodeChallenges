@@ -1,0 +1,85 @@
+// Constants
+const int COIN_TOSSES = 100
+const int LINES_IN_DIAGRAM = 30
+
+// Helper function
+func double generate_random() {
+    return random number from 0.0 to 1.0
+}
+
+class Coin {
+    bool head
+    
+    func bool toss() {
+        double random = generate_random()
+        if (prob >= random) {
+            head = true
+        }
+        return head
+    }
+}
+
+class BinomialDistribution {
+    int num
+    double prob
+    int result
+    
+    // Constructor
+    func BinomialDistribution(int n, double p) {
+        num = n
+        prob = p
+        result = 0
+    }
+    
+    func int experiment() {
+        Coin coin = new Coin()
+        result = 0
+        int i = 0
+        
+        while (i < num) {
+            coin.head = false
+            coin.toss()
+            
+            if (coin.head == true) {
+                result += 1
+            }
+            
+            i += 1
+        }
+        return result
+    }
+}
+
+func void main(string[] args) {
+    // Check for required arguments
+    if (args.length < 3) {
+        return
+    }
+    
+    double p = convert_to_double(args[0])
+    double p2 = convert_to_double(args[1])
+    int m = convert_to_int(args[2])
+    
+    BinomialDistribution dist = new BinomialDistribution(COIN_TOSSES, p)
+    list<int> data = []
+    
+    int i = 0
+    while (i < m) {
+        data.add(dist.experiment())
+        i += 1
+    }
+    
+    BinomialDistribution dist2 = new BinomialDistribution(COIN_TOSSES, p2)
+    list<int> data2 = []
+    
+    int j = 0  // Changed from i to avoid shadowing
+    while (j < m) {
+        data2.add(dist2.experiment())
+        j += 1
+    } 
+	
+    data = combine(data, data2)
+   
+    print(data)
+    show_graph(x_axis_limit=COIN_TOSSES, y_lines=LINES_IN_DIAGRAM)
+}
