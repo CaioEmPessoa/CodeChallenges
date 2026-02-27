@@ -11,6 +11,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 
+import urllib.request
+
 load_dotenv()
 
 ANIME_EPISODE_URL = os.getenv("ANIME_EPISODE_URL")
@@ -43,53 +45,77 @@ def search():
 
     buscando = True
     while (buscando):
+        current_episode = driver.current_url
         try:
             nextVidBtn = driver.find_element(By.CLASS_NAME, "proximoLink")
         except:
             buscando=False
             break
 
+
         # troca o player
         player2btn = driver.find_element(By.CSS_SELECTOR, '[data-tab="#player2"]')
         player2btn.click()
 
-        # troca view pro iframe do player
+        # encontra a div com o segundo e o iframe principal do site
+        player2div = driver.find_element(By.ID, "player2")
+        player2frame = player2div.find_element(By.CSS_SELECTOR, "iframe")
 
-        # TEM DOIS IFRAMES
-        # O DO PROPORIO ANIMESDIGITAL E O DO SITE, QUE MUDA. ELES NAO SAO IDENTIFICAVEIS A NAO SER PELO SRC.
-        # segue os links:
-        '''
-            https://animesdigital.org/aHR0cHM6Ly9idWxib3ZhLmJsb2dzcG90LmNvbS8yMDIzLzAyL3N0ZXZlbi11bmktZHUuaHRtbA==/106/bg.mp4?p=2&q=U3RldmVuIFVuaXZlcnNvIER1YmxhZG8gRGVzZW5obyAxMDc=&nocache1770471573
+        driver.switch_to.frame(player2frame)
 
-            https://www.blogger.com/video.g?token=AD6v5dwG05Mf84MVXKEWBhkm226BxUdCH5tCLl4uDDHFivX66vc_0b9iaoXbgC3PcvQbY3szXDezxJOK-I5Lp7VqyhjgjPF7UCXRlljr7fQt0tYQHOc4jO0L0NgIxBtpWZ5z0ID-aZI
-        '''
+        html = driver.page_source
 
-        iframe = driver.find_element(By.CSS_SELECTOR, "iframe.metaframe.rptss.no-lazy")
-        iframeSrc = iframe.get_attribute('src')
 
-        # driver.switch_to.frame(iframe);
+        # procura e abre o iframe do segundo player na mesma aba
+        soup = BeautifulSoup(html, 'html.parser')
+        iframe = soup.find("iframe", {"class":"metaframe rptss no-lazy"})
 
-        # driver.get(iframeSrc);
+        iframeSrcs = iframe.get("src")
 
-        # play
-        vidPlayer = driver.find_element(By.CLASS_NAME, "ppVepb")
-        vidPlayer.click()
+        driver.get(iframeSrcs)
 
-        # troca qualidade
-        configBtn = driver.find_element(By.CSS_SELECTOR, '[data-tooltip-target-id="ytp-settings-button"]')
-        configBtn.click()
+        # gera o iframe da google no click
+        vidDiv = driver.find_element(By.CLASS_NAME, "ppVepb")
+        vidDiv.click()
 
-        qualityMenu = driver.find_elements_by_xpath("//*[contains(text(), 'Quality')]")
-        qualityMenu.click()
-        qualityOptn = driver.find_elements_by_xpath("//*[contains(text(), '720p')]")
-        qualityOptn.click()
+        # troca pro player da google
+        googleFrame = driver.find_element(By.ID, "widget2")
+        driver.switch_to.frame(googleFrame)
 
-        qualityConfig = driver.find_element(By.CLASS_NAME, "ytp-menuitem-label")
+        ## encontra o url e baixa o video
+        vidurl = driver.find_element(By.CSS_SELECTOR, "video").get_attribute("src")
 
-        ## baixar o video
+        # Get user-agent from driver
+        user_agent = driver.execute_script("return navigator.userAgent;")
+
+        # Set up headers
+        headers = {
+            'User-Agent': user_agent,
+            'Referer': driver.current_url,  # Important for video streams
+            'Accept': 'video/webm,video/ogg,video/*;q=0.9,application/ogg;q=0.7,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Connection': 'keep-alive',
+        }
+
+        # Download the video
+        response = requests.get(vidurl, headers=headers, stream=True)
+
+        if response.status_code == 200:
+            print("Video encontrado!")
+            chunkSize = 2 * 1024 * 1024
+            responseIt = response.iter_content(chunk_size=chunkSize)
+            dwnldIndex = 0;
+            dwnldSize = int(response.headers.get('content-length', 0))
+
+            with open('videoname.mp4', 'wb') as f:
+                for chunk in responseIt:
+                    print(f"Download: {dwnldIndex/1000000:2f}mb/{dwnldSize/1000000:2f}mb")
+                    f.write(chunk)
+                    dwnldIndex+=chunkSize
 
 
         # vai pro proximo
+        driver.get(current_episode)
         nextVidBtn.click()
 
     driver.close()
