@@ -21,39 +21,62 @@ ANIME_EPISODE_NUMB = os.getenv("ANIME_EPISODE_NUMB")
 ANIME_TEMP = os.getenv("ANIME_TEMP")
 ANIME = os.getenv("ANIME")
 
-options = Options()
 
-# don't open the broser
-# options.add_argument("--headless")
-# options.add_argument("--silent")
-# options.add_argument("--log-level=3")
+def startDriver():
+    options = Options()
 
-# don't kills chrome when code ends
-#options.add_experimental_option("detach", True)
+    # don't open the broser
+    # options.add_argument("--headless")
+    # options.add_argument("--silent")
+    # options.add_argument("--log-level=3")
 
-#options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    # don't kills chrome when code ends
+    #options.add_experimental_option("detach", True)
 
-# Donwload driver (If needed) and starts it
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+    #options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-driver.install_addon(os.path.dirname(os.path.realpath(__file__)) + "/ublockorigin.xpi", temporary=True)
+    # Donwload driver (If needed) and starts it
+    driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
 
-driver.implicitly_wait(10)
+    # Adblock
+    driver.install_addon(os.path.dirname(os.path.realpath(__file__)) + "/ublockorigin.xpi", temporary=True)
 
-def search():
+    # Config
+    driver.implicitly_wait(10)
+
+    return driver
+
+
+def search(nextEp=False):
     global ANIME_EPISODE_NUMB, ANIME, ANIME_EPISODE_URL, ANIME_TEMP
-    driver.get(ANIME_EPISODE_URL)
 
     buscando = True
-    while (buscando):
+    while buscando:
         VID_NAME = f"{ANIME}  S{ANIME_TEMP}E{ANIME_EPISODE_NUMB}"
         print(f"Buscando {VID_NAME}...")
-        current_episode = driver.current_url
-        try:
-            nextVidBtn = driver.find_element(By.CLASS_NAME, "proximoLink")
-        except:
-            buscando=False
-            break
+
+        driver = startDriver();
+
+        if nextEp == False:
+            current_episode=ANIME_EPISODE_URL
+
+        driver.get(current_episode)
+
+        if nextEp:
+            try:
+                nextVidBtn = driver.find_element(By.CLASS_NAME, "proximoLink")
+                
+                # vai pro proximo
+                nextVidBtn.click()
+
+                current_episode = driver.current_url
+                print(current_episode, "PENIS")
+
+            except:
+                driver.close()
+                print("todos episodios foram baixados!")
+                buscando = False
+                break
 
 
         # troca o player
@@ -107,6 +130,9 @@ def search():
         # Download the video
         response = requests.get(vidurl, headers=headers, stream=True)
 
+        # Fecha o driver enquanto baixa o ep
+        driver.close()
+
         if response.status_code == 200:
             print(f"Baixando {VID_NAME}...")
             chunkSize = 2 * 1024 * 1024
@@ -119,17 +145,13 @@ def search():
                     print(f"Download: {dwnldIndex/1000000:.2f}mb/{dwnldSize/1000000:.2f}mb", end="\r")
                     f.write(chunk)
                     dwnldIndex+=chunkSize
+            print("Download completo!")
         else:
             print("Download do episódio com erro! Pulando...")
- 
-        ANIME_EPISODE_NUMB = f"{ANIME_EPISODE_NUMB + 1 :02}"
 
-        # vai pro proximo
-        driver.get(current_episode)
-        nextVidBtn.click()
+        ANIME_EPISODE_NUMB = f"{int(ANIME_EPISODE_NUMB) + 1 :02}"
 
-    driver.close()
-    print("todos episodios foram baixados!")
+        nextEp = True
 
 try:
     search()
