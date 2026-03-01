@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
@@ -13,13 +14,12 @@ from bs4 import BeautifulSoup
 
 import urllib.request
 
-load_dotenv()
+load_dotenv(os.path.dirname(os.path.realpath(__file__))+"/.env")
 
 ANIME_EPISODE_URL = os.getenv("ANIME_EPISODE_URL")
-
-if ANIME_EPISODE_URL=="":
-    input("PLEASE ADD YOUR INFO INTO .ENV FILE.")
-    exit()
+ANIME_EPISODE_NUMB = os.getenv("ANIME_EPISODE_NUMB")
+ANIME_TEMP = os.getenv("ANIME_TEMP")
+ANIME = os.getenv("ANIME")
 
 options = Options()
 
@@ -36,15 +36,18 @@ options = Options()
 # Donwload driver (If needed) and starts it
 driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
 
-driver.install_addon("/home/caio/Projetos/animesscrapper/ublockorigin.xpi", temporary=True)
+driver.install_addon(os.path.dirname(os.path.realpath(__file__)) + "/ublockorigin.xpi", temporary=True)
 
 driver.implicitly_wait(10)
 
 def search():
+    global ANIME_EPISODE_NUMB, ANIME, ANIME_EPISODE_URL, ANIME_TEMP
     driver.get(ANIME_EPISODE_URL)
 
     buscando = True
     while (buscando):
+        VID_NAME = f"{ANIME}  S{ANIME_TEMP}E{ANIME_EPISODE_NUMB}"
+        print(f"Buscando {VID_NAME}...")
         current_episode = driver.current_url
         try:
             nextVidBtn = driver.find_element(By.CLASS_NAME, "proximoLink")
@@ -83,7 +86,9 @@ def search():
         driver.switch_to.frame(googleFrame)
 
         ## encontra o url e baixa o video
-        vidurl = driver.find_element(By.CSS_SELECTOR, "video").get_attribute("src")
+        vid = driver.find_element(By.CSS_SELECTOR, "video")
+        vidurl = vid.get_attribute("src")
+        vid.send_keys(Keys.SPACE)
 
         # Get user-agent from driver
         user_agent = driver.execute_script("return navigator.userAgent;")
@@ -97,22 +102,27 @@ def search():
             'Connection': 'keep-alive',
         }
 
+        print("Video encontrado!")
+        
         # Download the video
         response = requests.get(vidurl, headers=headers, stream=True)
 
         if response.status_code == 200:
-            print("Video encontrado!")
+            print(f"Baixando {VID_NAME}...")
             chunkSize = 2 * 1024 * 1024
             responseIt = response.iter_content(chunk_size=chunkSize)
             dwnldIndex = 0;
             dwnldSize = int(response.headers.get('content-length', 0))
 
-            with open('videoname.mp4', 'wb') as f:
+            with open(f'{VID_NAME}.mp4', 'wb') as f:
                 for chunk in responseIt:
-                    print(f"Download: {dwnldIndex/1000000:2f}mb/{dwnldSize/1000000:2f}mb")
+                    print(f"Download: {dwnldIndex/1000000:.2f}mb/{dwnldSize/1000000:.2f}mb", end="\r")
                     f.write(chunk)
                     dwnldIndex+=chunkSize
-
+        else:
+            print("Download do episódio com erro! Pulando...")
+ 
+        ANIME_EPISODE_NUMB = f"{ANIME_EPISODE_NUMB + 1 :02}"
 
         # vai pro proximo
         driver.get(current_episode)
@@ -124,5 +134,5 @@ def search():
 try:
     search()
 except Exception as err:
-    # driver.close()
+    driver.close()
     raise err
