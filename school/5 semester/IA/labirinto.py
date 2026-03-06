@@ -16,11 +16,11 @@ LABIRINTO = [
     [".", ".", ".", ".", ".", ".", ".", ".", "."],
 ]
 
+
 lab = LABIRINTO
 
 # Gerar movimentos válidos a partir de uma posicao
 def check_valid(pos):
-    print("Checking", pos)
     valid_blocks = []
 
     x_size = len(lab[0])
@@ -36,10 +36,9 @@ def check_valid(pos):
         ]
 
     for valid_x, valid_y in around:
-        if 0 <= valid_x <= x_size and 0 <= valid_y <= y_size:
+        if 0 <= valid_x <= x_size-1 and 0 <= valid_y <= y_size-1:
             check_block = lab[valid_x][valid_y]
             if check_block not in ["#", "E"]:
-                print(f"Valid: {valid_x}:{valid_y} '{check_block}'" )
                 valid_blocks.append((valid_x, valid_y))
 
     return valid_blocks
@@ -48,14 +47,56 @@ def check_valid(pos):
 def manhatan_distance(pos1, pos2):
     x1, y1 = pos1
     x2, y2 = pos2
-    m = abs(x1 - y1) + abs(x2 - x2)
+    m = abs(x1 - y1) + abs(x2 - y2)
     return m
 
 # ======= ALGORITIMOS DE BUSCA =======
 # bfs
-def bfs():
+def bfs(lab, start, end):
+
+    buscando = True
+    current = start
+    buscados = [current]
+    opcoes = []
+
+    while buscando:
+        x, y = current
+        LABIRINTO[x][y] = "X"
+        
+        print(current)
+
+        if current == end:
+            LABIRINTO[x][y] = "!!"
+            buscando = False
+            return "encontrado!"
+
+        for i in check_valid(current):
+            if i not in buscados:
+                opcoes.append(i) 
+
+        if not opcoes:
+            return "Nenhum caminho encontrado."
+
+        for block in opcoes:
+            if block not in buscados:
+                current = block
+                buscados.append(current)
+                opcoes.remove(current)
+            else:
+                pass
+
     # explorar todas casas adjascentes antes de explorar um nivel a +
     return
+
+print(
+    bfs(lab, (0, 0), (6, 1))
+)
+
+print('---------')
+print(LABIRINTO[0][5])
+for i in LABIRINTO:
+    print(i)
+print('---------')
 
 # dfs
 def dfs():
