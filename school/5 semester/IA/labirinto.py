@@ -17,29 +17,27 @@ LABIRINTO = [
 ]
 
 
-lab = LABIRINTO
-
 # Gerar movimentos válidos a partir de uma posicao
-def check_valid(pos):
+def check_valid(lab, pos):
     valid_blocks = []
 
     x_size = len(lab[0])
     y_size = len(lab)
 
-    x, y = pos
+    y, x = pos
 
     around = [
-        (x  , y+1), # cima
-        (x+1, y  ), # direita
-        (x  , y-1), # baixo
-        (x-1, y  ), # esquerda
+        (y-1, x  ), # cima
+        (y  , x+1), # direita
+        (y+1, x  ), # baixo
+        (y  , x-1), # esquerda
         ]
 
-    for valid_x, valid_y in around:
-        if 0 <= valid_x <= x_size-1 and 0 <= valid_y <= y_size-1:
-            check_block = lab[valid_x][valid_y]
+    for valid_y, valid_x in around:
+        if 0 <= valid_y < y_size and 0 <= valid_x < x_size:
+            check_block = lab[valid_y][valid_x]
             if check_block not in ["#", "E"]:
-                valid_blocks.append((valid_x, valid_y))
+                valid_blocks.append((valid_y, valid_x))
 
     return valid_blocks
 
@@ -52,56 +50,58 @@ def manhatan_distance(pos1, pos2):
 
 # ======= ALGORITIMOS DE BUSCA =======
 # bfs
+from collections import deque
 def bfs(lab, start, end):
 
-    buscando = True
-    current = start
-    buscados = [current]
-    opcoes = []
+    buscados = set()
+    opcoes = deque([(start, [start])])
 
-    while buscando:
-        x, y = current
-        LABIRINTO[x][y] = "X"
-        
-        print(current)
+    while opcoes:
+        atual, path = opcoes.popleft()
 
-        if current == end:
-            LABIRINTO[x][y] = "!!"
-            buscando = False
-            return "encontrado!"
+        if atual == end:
+            return path
 
-        for i in check_valid(current):
+        for i in check_valid(lab, atual):
             if i not in buscados:
-                opcoes.append(i) 
+                buscados.add(i)
+                opcoes.append((i, path + [i]))
 
-        if not opcoes:
-            return "Nenhum caminho encontrado."
-
-        for block in opcoes:
-            if block not in buscados:
-                current = block
-                buscados.append(current)
-                opcoes.remove(current)
-            else:
-                pass
-
-    # explorar todas casas adjascentes antes de explorar um nivel a +
-    return
-
-print(
-    bfs(lab, (0, 0), (6, 1))
-)
+    return "Nenhum caminho encontrado."
 
 print('---------')
-print(LABIRINTO[0][5])
 for i in LABIRINTO:
     print(i)
 print('---------')
 
+print(
+    "bfs: ",
+    bfs(LABIRINTO, (0, 0), (0, 8))
+)
+
 # dfs
-def dfs():
-    # explorar um caminho ate o fim.
-    return
+def dfs(lab, start, end):
+
+    buscados = set([start])
+    opcoes = [(start, [start])]
+
+    while opcoes:
+        current, path = opcoes.pop()
+
+        if current == end:
+            return path
+
+        for i in check_valid(lab, current):
+            if i not in buscados:
+                buscados.add(i)
+                opcoes.append((i, path + [i]))
+
+    return "Nenhum caminho encontrado."
+
+print(
+    "dfs: ",
+    dfs(LABIRINTO, (0, 0), (0, 8))
+)
 
 # Busca Gulosa
 
