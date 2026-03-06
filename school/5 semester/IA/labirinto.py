@@ -116,5 +116,27 @@ print(
 
 # ======= VISUALIZACAO =======
 # Imprimir o labirinto no console
+def exibir_lab(lab, width=1, hide_dot=False):
+    for row in lab:
+        print([col.rjust(width).replace(".", " " if hide_dot==True else ".") for col in row])
 
 # Exibir o caminho encontrado por cada algoritimo
+def exibir_caminho(lab:[], path:(int, int)):
+    lab_path = lab.copy()
+
+    num = 0
+
+    for y, x in path:
+        lab_path[y][x] = str(num)
+        num+=1
+
+    exibir_lab(lab=lab_path, width=2, hide_dot=True)
+
+def performance(lab):
+    arr = [
+            dfs(LABIRINTO, (0, 0), (0, 8)),
+            bfs(LABIRINTO, (0, 0), (0, 8))
+        ]
+
+    print(f"O melhor é: {max(arr)} passos!")
+    #ou algo assim..
