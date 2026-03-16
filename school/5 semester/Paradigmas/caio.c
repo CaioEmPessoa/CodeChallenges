@@ -7,6 +7,7 @@
  */
 
 #include <string.h>  /* funções strlen() e strcpy() são permitidas */
+#include <stdio.h>
 
 /* ========================================================================= */
 /* Funções de contagem e verificação                                        */
@@ -35,14 +36,16 @@ void remover_espacos_extras(char *str);
  * @param novo Novo caractere
  */
 void substituir_caractere(char *str, char antigo, char novo){
-    size_t str_size = len(&str)/len(&str[0]);
-    char[str_size] str_cpy = &str;
-
+    size_t str_size = strlen(str);
+    char str_cpy[str_size];
+    strcpy(str_cpy, str);
+    
     for (int i = 0; i < str_size; i++) {
         if(str_cpy[i] == antigo) {
             str_cpy[i] = novo;
         }
     }
+    strcpy(str, str_cpy);
 };
 
 /**
@@ -52,7 +55,8 @@ void substituir_caractere(char *str, char antigo, char novo){
  * @param b Segunda string
  * @return 1 se forem anagramas, 0 caso contrário
  */
-int eh_anagrama(const char *a, const char *b);
+int eh_anagrama(const char *a, const char *b){
+};
 
 /**
  * @brief Capitaliza a primeira letra de cada palavra
@@ -61,3 +65,15 @@ int eh_anagrama(const char *a, const char *b);
  * @example "ola mundo" → "Ola Mundo"
  */
 void capitalizar_palavras(char *str);
+
+int main() {
+    char str[] = "Testando com uma Longa e Linda Frase";
+    char ant = 'a';
+    char new = 'p';
+
+    printf("%s\n", str);
+    substituir_caractere(str, ant, new);
+    printf("%s\n", str);
+    
+    return 0;
+}
