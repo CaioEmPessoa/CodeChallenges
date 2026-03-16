@@ -27,7 +27,25 @@ int contar_ocorrencias(const char *str, char c);
  * remove espaços no início e no final da string
  * @param str String a ser normalizada (deve ser modificável)
  */
-void remover_espacos_extras(char *str);
+void remover_espacos_extras(char *str) {
+    size_t start = 0, size = strlen(str), end = size;
+
+    while (str[start] == ' ') {
+        start++;
+    }
+
+    while (str[end-1] == ' ') {
+        end--;
+    }
+
+    char result[end - start];
+    size_t count = 0;
+    for (size_t i = start; i < end-1; i++) {
+        result[count++] = str[i];
+    }
+
+    strcpy(str, result);
+};
 
 /**
  * @brief Substitui todas as ocorrências de um caractere por outro
@@ -88,21 +106,26 @@ int eh_anagrama(const char *a, const char *b) {
 void capitalizar_palavras(char *str);
 
 int main() {
-    char str[] = "Testando com uma Longa e Linda Frase";
+    char str_sub[] = "Testando com uma Longa e Linda Frase";
     char ant = 'a';
     char new = 'p';
 
-    // printf("%s\n", str);
-    substituir_caractere(str, ant, new);
-    // printf("%s\n", str);
+    // printf("%s\n", str_sub);
+    substituir_caractere(str_sub, ant, new);
+    // printf("%s\n", str_sub);
 
     char str_a[] = "Teste A";
     char str_b[] = "eTSet a";
     int result = 0;
 
-    printf("%s - %s\n", str_a, str_b);
+    // printf("%s - %s\n", str_a, str_b);
     result = eh_anagrama(str_a, str_b);
-    printf("\nResult: %d\n", result);
+    // printf("\nResult: %d\n", result);
+
+    char str_spc[] = "   Espaços Nao importantes      ";
+    // printf("%s\n", str_spc);
+    remover_espacos_extras(str_spc);
+    // printf("%s\n", str_spc);
 
     return 0;
 }
