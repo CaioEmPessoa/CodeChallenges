@@ -54,45 +54,28 @@ void substituir_caractere(char *str, char antigo, char novo){
  */
 
 int eh_anagrama(const char *a, const char *b) {
-    char alp [26*2] = {
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-    };
-    int  vls1[26] = {};
-    int  vls2[26] = {};
-    int plc = 0;
+    int  values[26] = {};
 
     size_t a_len = strlen(a);
     size_t b_len = strlen(b);
 
-    for (int i = 0; i < a_len; i++) {
-        for (int j = 0; j < 26*2; j++) {
-            if (alp[j] == a[i]) {
-                plc = j;
-                if(j >= 26) plc = j-26;
-
-                vls1[plc]++;
-            }
-        }
+    for (size_t i = 0; i < a_len; i++) {
+        char c = a[i];
+        if (c >= 'a' && c <= 'z') values[c - 'a']++;
+        else if (c >= 'A' && c <= 'Z') values[c - 'A']++;
     }
 
-    for (int i = 0; i < b_len; i++) {
-        for (int j = 0; j < 26*2; j++) {
-            if (alp[j] == b[i]) {
-                plc = j;
-                if(j >= 26) plc = j-26;
-
-                vls2[plc]++;
-            }
-        }
+    for (size_t i = 0; i < b_len; i++) {
+        char c = b[i];
+        if (c >= 'a' && c <= 'z') values[c - 'a']--;
+        else if (c >= 'A' && c <= 'Z') values[c - 'A']--;
     }
 
-    int equal = 1;
     for (int i=0; i<26; i++ ) {
-        if (vls1[i]!=vls2[i]) equal = 0;
+        if (values[i] != 0) return 0;
     }
 
-    return equal;
+    return 1;
 
 };
 
@@ -113,8 +96,8 @@ int main() {
     substituir_caractere(str, ant, new);
     // printf("%s\n", str);
 
-    char str_a[] = "ab cDEFghIJ";
-    char str_b[] = "abcd  IJHgfe";
+    char str_a[] = "Teste A";
+    char str_b[] = "eTSet a";
     int result = 0;
 
     printf("%s - %s\n", str_a, str_b);
