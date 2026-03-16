@@ -52,26 +52,37 @@ void substituir_caractere(char *str, char antigo, char novo){
  * @param b Segunda string
  * @return 1 se forem anagramas, 0 caso contrário
  */
+
 int eh_anagrama(const char *a, const char *b) {
-    char alp [26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v'};
+    char alp [26*2] = {
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    };
     int  vls1[26] = {};
     int  vls2[26] = {};
+    int plc = 0;
 
     size_t a_len = strlen(a);
     size_t b_len = strlen(b);
 
     for (int i = 0; i < a_len; i++) {
-        for (int j = 0; j < 26; j++) {
+        for (int j = 0; j < 26*2; j++) {
             if (alp[j] == a[i]) {
-                vls1[j]++;
+                plc = j;
+                if(j >= 26) plc = j-26;
+
+                vls1[plc]++;
             }
         }
     }
 
     for (int i = 0; i < b_len; i++) {
-        for (int j = 0; j < 26; j++) {
+        for (int j = 0; j < 26*2; j++) {
             if (alp[j] == b[i]) {
-                vls2[j]++;
+                plc = j;
+                if(j >= 26) plc = j-26;
+
+                vls2[plc]++;
             }
         }
     }
@@ -102,8 +113,8 @@ int main() {
     substituir_caractere(str, ant, new);
     // printf("%s\n", str);
 
-    char str_a[] = "caio polonio";
-    char str_b[] = "caio polobio";
+    char str_a[] = "ab cDEFghIJ";
+    char str_b[] = "abcd  IJHgfe";
     int result = 0;
 
     printf("%s - %s\n", str_a, str_b);
