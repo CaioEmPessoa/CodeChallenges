@@ -1,7 +1,7 @@
 /**
  * @file string_utils.c
  * @brief Exercícios acerca de funções de análise e manipulação de strings em C
- * 
+ *
  * Conjunto de funções simples e progressivas para aprendizado de manipulação de strings,
  * ponteiros, iteração em arrays de char, passagem por valor/referência e tratamento de casos borda.
  */
@@ -37,15 +37,12 @@ void remover_espacos_extras(char *str);
  */
 void substituir_caractere(char *str, char antigo, char novo){
     size_t str_size = strlen(str);
-    char str_cpy[str_size];
-    strcpy(str_cpy, str);
-    
+
     for (int i = 0; i < str_size; i++) {
-        if(str_cpy[i] == antigo) {
-            str_cpy[i] = novo;
+        if(str[i] == antigo) {
+            str[i] = novo;
         }
     }
-    strcpy(str, str_cpy);
 };
 
 /**
@@ -55,7 +52,37 @@ void substituir_caractere(char *str, char antigo, char novo){
  * @param b Segunda string
  * @return 1 se forem anagramas, 0 caso contrário
  */
-int eh_anagrama(const char *a, const char *b){
+int eh_anagrama(const char *a, const char *b) {
+    char alp [26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v'};
+    int  vls1[26] = {};
+    int  vls2[26] = {};
+
+    size_t a_len = strlen(a);
+    size_t b_len = strlen(b);
+
+    for (int i = 0; i < a_len; i++) {
+        for (int j = 0; j < 26; j++) {
+            if (alp[j] == a[i]) {
+                vls1[j]++;
+            }
+        }
+    }
+
+    for (int i = 0; i < b_len; i++) {
+        for (int j = 0; j < 26; j++) {
+            if (alp[j] == b[i]) {
+                vls2[j]++;
+            }
+        }
+    }
+
+    int equal = 1;
+    for (int i=0; i<26; i++ ) {
+        if (vls1[i]!=vls2[i]) equal = 0;
+    }
+
+    return equal;
+
 };
 
 /**
@@ -71,9 +98,17 @@ int main() {
     char ant = 'a';
     char new = 'p';
 
-    printf("%s\n", str);
+    // printf("%s\n", str);
     substituir_caractere(str, ant, new);
-    printf("%s\n", str);
-    
+    // printf("%s\n", str);
+
+    char str_a[] = "caio polonio";
+    char str_b[] = "caio polobio";
+    int result = 0;
+
+    printf("%s - %s\n", str_a, str_b);
+    result = eh_anagrama(str_a, str_b);
+    printf("\nResult: %d\n", result);
+
     return 0;
 }
