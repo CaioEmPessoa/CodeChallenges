@@ -20,7 +20,15 @@
  * @param c Caractere a ser procurado
  * @return Número de ocorrências do caractere
  */
-int contar_ocorrencias(const char *str, char c);
+int contar_ocorrencias(const char *str, const char c) {
+    int oc = 0;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == c) oc++;
+    }
+
+    return oc;
+};
 
 /**
  * @brief Remove espaços extras: deixa apenas um espaço entre palavras,
@@ -30,20 +38,27 @@ int contar_ocorrencias(const char *str, char c);
 void remover_espacos_extras(char *str) {
     size_t start = 0, size = strlen(str), end = size;
 
+    // Confere ate quando tem espaços no começo da string
     while (str[start] == ' ') {
         start++;
     }
 
+    // Confere ate quando tem espaços no fim da string
     while (str[end-1] == ' ') {
         end--;
     }
 
+    // Nova lista pra armazenar o resultado, com o novo tamanho.
     char result[end - start];
     size_t count = 0;
+
+    // Armazena apeans os itens a partir de quando não tem mais espaços,
+    // até quando se tem somente caracteres.
     for (size_t i = start; i < end-1; i++) {
         result[count++] = str[i];
     }
 
+    // Copia o valor do resultado na string passada como parametro.
     strcpy(str, result);
 };
 
@@ -54,13 +69,11 @@ void remover_espacos_extras(char *str) {
  * @param novo Novo caractere
  */
 void substituir_caractere(char *str, char antigo, char novo){
-    size_t str_size = strlen(str);
 
-    for (int i = 0; i < str_size; i++) {
-        if(str[i] == antigo) {
-            str[i] = novo;
-        }
+    for (int i = 0; str[i] != '\0'; i++) {
+        if(str[i] == antigo) str[i] = novo;
     }
+
 };
 
 /**
@@ -72,23 +85,25 @@ void substituir_caractere(char *str, char antigo, char novo){
  */
 
 int eh_anagrama(const char *a, const char *b) {
-    int  values[26] = {};
+    int  values[26] = {}; // Array contadora, com o tamanho do alfabeto.
 
-    size_t a_len = strlen(a);
-    size_t b_len = strlen(b);
-
-    for (size_t i = 0; i < a_len; i++) {
+    for (size_t i = 0; a[i] != '\0'; i++) {
         char c = a[i];
+        // Adiciona +1 na respectiva posicao da letra na lista de valores.
+        // Letras maiusculas adicionam na mesma posicao das minusculas
         if (c >= 'a' && c <= 'z') values[c - 'a']++;
         else if (c >= 'A' && c <= 'Z') values[c - 'A']++;
     }
 
-    for (size_t i = 0; i < b_len; i++) {
+    // Mesma coisa que o loop acima, porém ao inves de adicionar +1,
+    // remove -1 item na posicao da letra na lista do alfabeto.
+    for (size_t i = 0; b[i] != '\0'; i++) {
         char c = b[i];
         if (c >= 'a' && c <= 'z') values[c - 'a']--;
         else if (c >= 'A' && c <= 'Z') values[c - 'A']--;
     }
 
+    // Caso todos itens nao forem == 0, nao é um anagrama.
     for (int i=0; i<26; i++ ) {
         if (values[i] != 0) return 0;
     }
@@ -103,29 +118,75 @@ int eh_anagrama(const char *a, const char *b) {
  * @param str String a ser modificada (deve ser modificável)
  * @example "ola mundo" → "Ola Mundo"
  */
-void capitalizar_palavras(char *str);
+void capitalizar_palavras(char *str) {
+    int diff = 'a'-'A'; // Pegando a diferença entre os chars na tabela ascii
+
+    // apenas no caso do primeiro char
+    if (str[0] >= 'a' && str[0] <= 'z') str[0] -= diff;
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        // Caso o caractere atual seja um espaço e
+        // o caractere seguinte uma letra minuscula
+        if (str[i]   == ' ' &&
+            str[i+1] >= 'a' && str[i+1] <= 'z'
+        ) {
+            str[i+1] -= diff; // converte pra upper com base na diff
+        }
+    }
+
+};
 
 int main() {
+    /*
+        TESTE FUNCAO SUBSTITUIR CARACTERE.
+    */
     char str_sub[] = "Testando com uma Longa e Linda Frase";
     char ant = 'a';
     char new = 'p';
 
-    // printf("%s\n", str_sub);
+    printf("%s\n", str_sub);
     substituir_caractere(str_sub, ant, new);
-    // printf("%s\n", str_sub);
+    printf("%s\n", str_sub);
 
-    char str_a[] = "Teste A";
-    char str_b[] = "eTSet a";
-    int result = 0;
+    /*
+        TESTE FUNCAO EH_ANAGRAMA
+    */
+    char str_an_a[] = "Teste A";
+    char str_an_b[] = "eTSet a";
+    int result_an = 0;
 
-    // printf("%s - %s\n", str_a, str_b);
-    result = eh_anagrama(str_a, str_b);
-    // printf("\nResult: %d\n", result);
+    printf("%s - %s\n", str_an_a, str_an_b);
+    result_an = eh_anagrama(str_an_a, str_an_b);
+    printf("\nResult: %d\n", result_an);
 
+    /*
+        TESTE FUNCAO REMOVER_ESPACOS_EXTRAS
+    */
     char str_spc[] = "   Espaços Nao importantes      ";
     // printf("%s\n", str_spc);
     remover_espacos_extras(str_spc);
     // printf("%s\n", str_spc);
+
+
+    /*
+        TESTE FUNCAO CONTAR_OCORRENCIAS
+    */
+    char str_oc[] = "01 Contar ocorrencias De UMA STRING 12";
+    char char_oc  = '1';
+    int result_oc;
+
+    // printf("%s - %c\n", str_oc, char_oc);
+    result_oc = contar_ocorrencias(str_oc, char_oc);
+    // printf("Encontradas %d ocorrencias do caractere '%c'\n", result_oc, char_oc);
+
+    /*
+        TESTE FUNCAO CAPITALIZAR_PALAVRAS
+    */
+    char str_cap[] = "a Don pedro  segundo";
+
+    // printf("%s\n", str_cap);
+    capitalizar_palavras(str_cap);
+    // printf("%s\n", str_cap);
 
     return 0;
 }
