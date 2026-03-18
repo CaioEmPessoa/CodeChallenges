@@ -14,6 +14,23 @@
 /* ========================================================================= */
 
 
+int contar_substring(const char *texto, const char *busca) {
+    int tamTexto = strlen(texto), tamBusca = strlen(busca);
+    int qnt = 0, count = 0;
+
+    for (int i = 0; i < tamTexto; i++) {
+        
+        for (int j = 0; j < tamBusca; j++) {
+            if (texto[i+j] == busca[j]) count++;
+        }
+
+        if (count == tamBusca) qnt++;
+        count = 0;
+    }
+
+    return qnt;
+}
+
 /**
  * @brief Conta quantas vezes um determinado caractere aparece na string
  * @param str Ponteiro para a string terminada em '\0'
@@ -137,6 +154,20 @@ void capitalizar_palavras(char *str) {
 };
 
 int main() {
+
+    /*
+        TESTE FUNCAO CONTAR_SUBSTRING
+    */
+
+    char str_sub_a[] = "po tdoi pbem";
+    char str_sub_b[] = "o";
+    int result_sub   = 0;
+    
+    printf("Texto: %s - Busca: %s\n", str_sub_a, str_sub_b);
+    result_sub = contar_substring(str_sub_a, str_sub_b);
+    printf("Qntd: %d\n", result_sub);
+
+
     /*
         TESTE FUNCAO SUBSTITUIR CARACTERE.
     */
@@ -144,9 +175,9 @@ int main() {
     char ant = 'a';
     char new = 'p';
 
-    printf("%s\n", str_sub);
+    // printf("%s\n", str_sub);
     substituir_caractere(str_sub, ant, new);
-    printf("%s\n", str_sub);
+    // printf("%s\n", str_sub);
 
     /*
         TESTE FUNCAO EH_ANAGRAMA
@@ -155,9 +186,9 @@ int main() {
     char str_an_b[] = "eTSet a";
     int result_an = 0;
 
-    printf("%s - %s\n", str_an_a, str_an_b);
+    // printf("%s - %s\n", str_an_a, str_an_b);
     result_an = eh_anagrama(str_an_a, str_an_b);
-    printf("\nResult: %d\n", result_an);
+    // printf("\nResult: %d\n", result_an);
 
     /*
         TESTE FUNCAO REMOVER_ESPACOS_EXTRAS
