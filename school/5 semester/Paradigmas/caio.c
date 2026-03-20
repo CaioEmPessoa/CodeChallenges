@@ -19,7 +19,7 @@ int contar_substring(const char *texto, const char *busca) {
     int qnt = 0, count = 0;
 
     for (int i = 0; i < tamTexto; i++) {
-        
+
         for (int j = 0; j < tamBusca; j++) {
             if (texto[i+j] == busca[j]) count++;
         }
@@ -53,7 +53,7 @@ int contar_ocorrencias(const char *str, const char c) {
  * @param str String a ser normalizada (deve ser modificável)
  */
 void remover_espacos_extras(char *str) {
-    size_t start = 0, size = strlen(str), end = size;
+    size_t start = 0, size = strlen(str), end = size + 1;
 
     // Confere ate quando tem espaços no começo da string
     while (str[start] == ' ') {
@@ -162,7 +162,7 @@ int main() {
     char str_sub_a[] = "po tdoi pbem";
     char str_sub_b[] = "o";
     int result_sub   = 0;
-    
+
     printf("Texto: %s - Busca: %s\n", str_sub_a, str_sub_b);
     result_sub = contar_substring(str_sub_a, str_sub_b);
     printf("Qntd: %d\n", result_sub);
@@ -202,22 +202,60 @@ int main() {
     /*
         TESTE FUNCAO CONTAR_OCORRENCIAS
     */
+    printf("\n----- funcao contar_ocorrencias -----\n");
     char str_oc[] = "01 Contar ocorrencias De UMA STRING 12";
     char char_oc  = '1';
     int result_oc;
 
-    // printf("%s - %c\n", str_oc, char_oc);
+    printf("Parametro: %s - %c\n", str_oc, char_oc);
     result_oc = contar_ocorrencias(str_oc, char_oc);
-    // printf("Encontradas %d ocorrencias do caractere '%c'\n", result_oc, char_oc);
+    printf("Resposta : Encontradas %d ocorrencias do caractere '%c'\n", result_oc, char_oc);
+
+    /*
+        TESTE FUNCAO REMOVER_ESPACOS_EXTRAS
+    */
+    printf("\n----- funcao remover_espacos_extras -----\n");
+    char str_spc[] = "   Espaços Nao importantes      ";
+    printf("Parametro: %s\n", str_spc);
+    remover_espacos_extras(str_spc);
+    printf("Resposta : %s\n", str_spc);
+
+    /*
+        TESTE FUNCAO SUBSTITUIR CARACTERE.
+    */
+    printf("\n----- funcao substituir_caractere -----\n");
+    char str_sub[] = "Testando com uma Longa e Linda Frase";
+    char ant = 'a';
+    char new = 'p';
+
+    printf("Parametro: %s\n", str_sub);
+    substituir_caractere(str_sub, ant, new);
+    printf("Resposta : %s\n", str_sub);
+
+    /*
+        TESTE FUNCAO EH_ANAGRAMA
+    */
+    printf("\n----- funcao eh_anagrama -----\n");
+    char str_an_a[] = "Teste A";
+    char str_an_b[] = "eTSet a";
+    int result_an = 0;
+
+    printf("Parametro: %s - %s\n", str_an_a, str_an_b);
+    result_an = eh_anagrama(str_an_a, str_an_b);
+    printf("\nResposta : %d\n", result_an);
 
     /*
         TESTE FUNCAO CAPITALIZAR_PALAVRAS
     */
+    printf("\n----- funcao capitalizar_palavras -----\n");
     char str_cap[] = "a Don pedro  segundo";
 
-    // printf("%s\n", str_cap);
+    printf("Parametro: %s\n", str_cap);
     capitalizar_palavras(str_cap);
-    // printf("%s\n", str_cap);
+    printf("Resposta : %s\n", str_cap);
+
+
+    printf("\n\n\n");
 
     return 0;
 }
