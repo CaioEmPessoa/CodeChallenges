@@ -1,0 +1,13 @@
+CC      = g++
+FLAGS   = -std=c++17 -Wall -Wextra
+
+SRC     = src/conjunto.cpp src/grafo.cpp src/main.cpp
+TARGET  = programa
+
+all: $(TARGET)
+
+$(TARGET):
+    $(CC) $(FLAGS) $(SRC) -o $(TARGET)
+
+clean:
+    rm -f $(TARGET)

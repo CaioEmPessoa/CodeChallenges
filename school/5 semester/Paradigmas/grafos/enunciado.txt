@@ -1,0 +1,30 @@
+Você deve implementar duas classes em C++: Conjunto e Grafo. A classe Conjunto modela um conjunto matemático de inteiros e oferece as operações clássicas entre conjuntos como operadores sobrecarregados. A classe Grafo herda Conjunto — seus vértices são os elementos do conjunto — e adiciona arestas e algoritmos básicos de busca e detecção de caminhos e circuitos.
+
+O foco do exercício é a aplicação de herança, sobrecarga de operadores e gerenciamento manual de memória, sem uso de bibliotecas auxiliares da STL.
+
+Restrições de bibliotecas
+
+// PERMITIDO — somente estas:
+#include <iostream>
+#include <stdexcept>
+
+// PROIBIDO — implemente você mesmo:
+// <vector>  <queue>  <stack>  <list>
+// <algorithm>  <string>  <limits>  e qualquer outra
+
+Arquitetura
+
+CAMADA 1 — Utilitários globais
+  minInt()    INF
+
+CAMADA 2 — Classe Conjunto
+  Elementos inteiros sem repetição
+  Operadores: |  &  -  ==  !=  <=  +=  ~  <<
+
+CAMADA 3 — Classe Grafo  (herda Conjunto)
+  Vértices = elementos do Conjunto herdado
+  Arestas armazenadas em lista de adjacência
+  Operadores: +=  ()  ~  ^
+  Algoritmos: bfs()  dfs()  temCaminho()
+              imprimirCaminho()  temCircuito()
+              componentesConexas()

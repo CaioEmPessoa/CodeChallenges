@@ -1,0 +1,38 @@
+Saída Esperada (todos os testes passando)
+
+############################################################
+ BATERIA DE TESTES — Biblioteca Conjuntos e Grafos
+############################################################
+
+============================================================
+ TESTE 01 — Conjunto: adicionar e pertence
+============================================================
+ [OK] pertence(10) apos adicionar(10)
+ [OK] pertence(20) apos adicionar(20)
+ [OK] !pertence(99) para elemento nao inserido
+ [OK] adicionar duplicata nao aumenta tamanho
+
+============================================================
+ TESTE 02 — Conjunto: remover
+============================================================
+ [OK] !pertence(2) apos remover(2)
+ [OK] pertence(1) e pertence(3) apos remover(2)
+ [OK] tamanho == 2 apos remover um elemento
+ [OK] tamanho continua 2 apos remover elemento ausente
+
+ ============================================================
+ TESTE 03 — Conjunto: operador~ (cardinalidade)
+============================================================
+ [OK] ~A == 0 para conjunto vazio
+ [OK] ~A == 3 apos inserir 3 elementos
+ [OK] ~A == 2 apos remover um elemento
+
+ ... (continua para todos os 20 testes)
+
+============================================================
+ RESULTADO FINAL
+ ============================================================
+ Total : 20
+ OK : 20
+ Falhou : 0
+============================================================
