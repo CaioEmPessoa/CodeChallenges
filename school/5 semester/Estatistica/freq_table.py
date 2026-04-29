@@ -25,14 +25,47 @@ except:
 
 valores = [float(e) if isfloat else int(e) for e in valores_arr]
 
+print(valores)
+
 # Cálculo de Sturges corrigido: usa 3.322 e ceil em vez de 3.3 e round
 sturges = math.ceil(1 + 3.322 * math.log10(len(valores)))
 
 # Amplitude (diferença do maior pro menor) de TODOS valores
-amplitude_total = max(valores) - min(valores)
+amplitude_total = round(max(valores) - min(valores), 2)
 
 # Média de amplitudes por classes. Utiliza o valor de sturges pra fazer este cálculo
 amplitude_classe = round(amplitude_total/sturges, 2)
+
+print("==============-- RESPOSTAS---==============")
+
+print(f"amplitude total: {amplitude_total}")
+print(f"sturges - numero ideal de classes: {sturges}")
+print(f"sturges - intervalo das classes: {amplitude_classe}")
+print()
+print()
+
+print("==============-- CALCULOS---==============")
+print("=====-- AMPLITUDE TOTAL --=====")
+print(f"({max(valores)} - {min(valores)})")
+print(amplitude_total)
+print("==============-----==============")
+print()
+
+print("=====-- STURGES --=====")
+print(f"1 + 3,322 * log10({len(valores)})")
+print(f"1 + 3,221 * { round( math.log10(len(valores)), 2 ) }")
+print(f"1 + {round( 3.221 * round( math.log10(len(valores)), 2 ), 2)}")
+print(f" {sturges} *arredondado pra cima")
+print("==============-----==============")
+print()
+
+print("=====-- AMPLITUDE CLASSES --=====")
+print(f"{amplitude_total}/{sturges}")
+print(f"{amplitude_classe} *arredondado pra duas casas")
+
+print("==============-----==============")
+print()
+print()
 
 # Variaveis pra logica do if abaixo
 results = []
@@ -61,12 +94,8 @@ for v in range(sturges):
         "fr_cml": acmld
     })
 
-print(valores)
-print("=====-----=====")
-print(f"amplitude total: {amplitude_total}")
-print(f"sturges - numero ideal de classes: {sturges}")
-print(f"sturges - intervalo das classes: {amplitude_classe}")
-
 print(f"{'Intervalo':<20} {'Fi':>6} {'fr':>8} {'Fac':>6}")
 for i in results:
         print(f"{i['interval']:<20} {i['fr_abs']:>6} {i['fr_rlt']:>8.2f} {i['fr_cml']:>6}")
+
+print("=====-----=====")
