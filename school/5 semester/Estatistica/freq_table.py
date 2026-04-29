@@ -4,12 +4,13 @@ valores_str = "450; 468; 476; 480; 482; 485; 488; 490; 492; 494; 496; 498; 499; 
 
 valores = [int(e) for e in valores_str.split("; ")]
 
-# Amplitude total
-amplitude_total = max(valores) - min(valores)
+sturges = round(1 + 3.3 * math.log10(len(valores)))
+
+amplitude_total = math.ceil(max(valores) - min(valores))
+amplitude_classe = math.ceil(amplitude_total/sturges)
 
 print(f"amplitude total: {amplitude_total}")
 
-sturges = 1 + math.ceil(3.3 * math.log10(len(valores)))
 
 numero_ideal_classes = amplitude_total / sturges
 
@@ -23,26 +24,33 @@ numero_ideal_classes = amplitude_total / sturges
 results = []
 
 c_old = valores[0]
+acmld = 0
 intervals = [c_old+( numero_ideal_classes*i ) for i in range(sturges+1)]
-for v in range(len(intervals)):
-    i     = intervals[v]
-    i_old = intervals[v-1]
-    
-    c = min(valores, key=lambda x:abs(c_old+sturges))
-    
-    abslt = len([j for j in valores if j>=i_old and j < i])
-    rltv  = abslt/sum(valores)
-    acmld = sum([i["fr_abs"] for i in results])
-    c_old = c
+for v in range(sturges):
+    i_inf = min(valores) + v * amplitude_classe
+    i_sup = min(valores) + (v + 1) * amplitude_classe
+
+    # Quantidade de itens no intervalo
+    if v == sturges - 1:
+        abslt = len([i for i in valores if i >= i_inf and i <= i_sup])
+    else:
+        abslt = len([i for i in valores if i >= i_inf and i < i_sup])
+
+    # Quantidade de itens / pelo total
+    rltv  = abslt / len(valores)
+    acmld += abslt # apenas soma tudo de vez em vez
 
     results.append({
+        "interval": f"{i_inf} - {i_sup}",
         "fr_abs": abslt,
-        "fr_rlt": rltv,
+        "fr_rlt": round(rltv, 4)*100,
         "fr_cml": acmld
     })
 
+print(valores)
 print(f"sturges - numero ideal de classes: {sturges}")
 print(f"sturges - intervalo de classes: {numero_ideal_classes}")
 
+print(f"{'Intervalo':<10} {'Fi':>6} {'fr':>8} {'Fac':>6}")
 for i in results:
-    print(i)
+        print(f"{i['interval']:<10} {i['fr_abs']:>6} {i['fr_rlt']:>8.2f} {i['fr_cml']:>6}")
