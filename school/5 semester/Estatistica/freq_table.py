@@ -1,8 +1,29 @@
 import math
 
-valores_str = """450; 468; 476; 480; 482; 485; 488; 490; 492; 494; 496; 498; 499; 501; 502; 504; 505; 506; 507; 508; 509; 510; 510; 511; 512; 513; 514; 515; 515; 516; 517; 518; 519; 520;520; 521; 522; 523; 524; 524; 525; 525; 526; 527; 528; 529; 530; 530; 531; 532; 533;534; 535; 535; 536; 537; 538; 539; 540; 540; 541; 542; 544; 545; 546; 548; 549; 550;552; 554; 556; 558; 560; 562; 565; 568; 570; 574; 582; 600"""
+valores_str = """
+1,80; 1,83; 1,85; 1,86; 1,86; 1,87; 1,87; 1,87; 1,88; 1,88; 1,88; 1,89; 1,89; 1,90; 1,90;
+1,90; 1,90; 1,91; 1,91; 1,91; 1,91; 1,91; 1,92; 1,92; 1,92; 1,92; 1,92; 1,92; 1,93; 1,93;
+1,93; 1,93; 1,93; 1,93; 1,94; 1,94; 1,94; 1,94; 1,94; 1,94; 1,95; 1,95; 1,95; 1,95; 1,95;
+1,95; 1,96; 1,96; 1,96; 1,96; 1,96; 1,96; 1,97; 1,97; 1,97; 1,97; 1,97; 1,97; 1,98; 1,98;
+1,98; 1,98; 1,98; 1,99; 1,99; 1,99; 1,99; 2,00; 2,00; 2,01; 2,01; 2,01; 2,02; 2,02; 2,02;
+2,03; 2,03; 2,04; 2,06; 2,10
+"""
 
-valores = [int(e) for e in valores_str.split(";")]
+valores_snt = valores_str.replace("\n", "").replace(",", ".")
+valores_arr = valores_snt.split(";")
+
+try:
+    int(valores_arr[0])
+    isfloat=False
+except:
+    try:
+        float(valores_arr[0])
+        isfloat = True
+    except:
+        print("Por favor, insira ou um array de int ou de float.")
+        exit()
+
+valores = [float(e) if isfloat else int(e) for e in valores_arr]
 
 # nao faço ideia kk apenas saiba que ele desocbre a quantidade de classes que um intervalo precisa
 # pra ser dividido igualmente em algumas partes ai
