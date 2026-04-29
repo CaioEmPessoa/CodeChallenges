@@ -4,40 +4,35 @@ valores_str = """450; 468; 476; 480; 482; 485; 488; 490; 492; 494; 496; 498; 499
 
 valores = [int(e) for e in valores_str.split(";")]
 
+# nao faço ideia kk apenas saiba que ele desocbre a quantidade de classes que um intervalo precisa
+# pra ser dividido igualmente em algumas partes ai
 sturges = round(1 + 3.3 * math.log10(len(valores)))
 
+# Amplitude (diferença do maior pro menor) de TODOS valores
 amplitude_total = math.ceil(max(valores) - min(valores))
+
+# Média de amplitudes por classes. Utiliza o valor de sturges pra fazer este cálculo
 amplitude_classe = math.ceil(amplitude_total/sturges)
 
-
-
-numero_ideal_classes = math.ceil(amplitude_total / sturges)
-
-'''
-{
-    fr_abs: x,
-    fr_rlt: x,
-    fr_cml: x
-}
-'''
+# Variaveis pra logica do if abaixo
 results = []
-
-c_old = valores[0]
 acmld = 0
-intervals = [c_old+( numero_ideal_classes*i ) for i in range(sturges+1)]
-for v in range(sturges):
-    i_inf = min(valores) + v * amplitude_classe
-    i_sup = min(valores) + (v + 1) * amplitude_classe
 
-    # Quantidade de itens no intervalo
-    if v == sturges - 1:
+for v in range(sturges):
+    # Intervalo, definido pelo menor valor do "valores" + a amplitude da classe * o index da classe atual
+        # em resumo, cada classe é esperada ter uma quantidade pré-definida de itens dentro do range dela,
+        # e este range é a amplitude * a classe atual
+    i_inf = min(valores) + v * amplitude_classe         # limite inferior
+    i_sup = min(valores) + (v + 1) * amplitude_classe   # limite superior
+
+    # Apenas a quantidade de itens dentro do intervalo definido acima
+    if v == sturges - 1: # muda o comportamento quando é o ULTIMO item da lista
         abslt = len([i for i in valores if i >= i_inf and i <= i_sup])
     else:
         abslt = len([i for i in valores if i >= i_inf and i < i_sup])
 
-    # Quantidade de itens / pelo total
-    rltv  = abslt / len(valores)
-    acmld += abslt # apenas soma tudo de vez em vez
+    rltv  = abslt / len(valores) # Quantidade de itens / pelo total
+    acmld += abslt # apenas soma todos valores absolutos de vez em vez
 
     results.append({
         "interval": f"{i_inf} - {i_sup}",
@@ -47,9 +42,10 @@ for v in range(sturges):
     })
 
 print(valores)
+print("=====-----=====")
 print(f"amplitude total: {amplitude_total}")
 print(f"sturges - numero ideal de classes: {sturges}")
-print(f"sturges - intervalo de classes: {numero_ideal_classes}")
+print(f"sturges - intervalo das classes: {amplitude_classe}")
 
 print(f"{'Intervalo':<10} {'Fi':>6} {'fr':>8} {'Fac':>6}")
 for i in results:
