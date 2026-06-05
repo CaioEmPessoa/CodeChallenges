@@ -4,11 +4,13 @@
 // TODO 2.1 — crescer
 // -------------------------------------------------------
 void Conjunto::crescer() {
-    // 1. cap *= 2
-    // 2. int* novo = new int[cap]
-    // 3. Copiar cada elemento
-    // 4. delete[] elementos
-    // 5. elementos = novo
+    cap *= 2;
+    int* novo = new int[cap];
+    for (int i = 0; i < tam; ++i) {
+        novo[i] = elementos[i];
+    }
+    delete[] elementos;
+    elementos = novo;
 }
 
 // -------------------------------------------------------
@@ -21,7 +23,7 @@ Conjunto::Conjunto(int capInicial)
 // TODO 2.2 — Destrutor
 // -------------------------------------------------------
 Conjunto::~Conjunto() {
-    // delete[] elementos
+    delete[] elementos;
 }
 
 // -------------------------------------------------------
@@ -30,83 +32,108 @@ Conjunto::~Conjunto() {
 Conjunto::Conjunto(const Conjunto& outro)
     : tam(outro.tam), cap(outro.cap),
       elementos(new int[outro.cap]) {
-    // Copiar cada elemento de outro.elementos para elementos
+    for (int i = 0; i < tam; ++i) {
+        elementos[i] = outro.elementos[i];
+    }
 }
 
 // -------------------------------------------------------
 // Sobrecarga 1 — Atribuição
 // -------------------------------------------------------
 Conjunto& Conjunto::operator=(const Conjunto& outro) {
-    // TODO 2.4:
-    // Guard: if (this == &outro) return *this
-    // delete[] elementos
-    // Copiar tam, cap; alocar new int[cap]; copiar elementos
-    // return *this
+    if (this == &outro) {
+        return *this;
+    }
+    delete[] elementos;
+    tam = outro.tam;
+    cap = outro.cap;
+    elementos = new int[cap];
+    for (int i = 0; i < tam; ++i) {
+        elementos[i] = outro.elementos[i];
+    }
+    return *this;
 }
 
 // -------------------------------------------------------
 // TODO 2.5 — pertence
 // -------------------------------------------------------
 bool Conjunto::pertence(int x) const {
-    // Percorrer elementos[0..tam-1]
-    // Retornar true se algum for igual a x
+    for (int i = 0; i < tam; ++i) {
+        if (elementos[i] == x) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // -------------------------------------------------------
 // TODO 2.6 — adicionar
 // -------------------------------------------------------
 void Conjunto::adicionar(int x) {
-    // if (pertence(x)) return
-    // if (tam == cap) crescer()
-    // elementos[tam++] = x
+    if (pertence(x)) {
+        return;
+    }
+    if (tam == cap) {
+        crescer();
+    }
+    elementos[tam++] = x;
 }
 
 // -------------------------------------------------------
 // TODO 2.7 — remover
 // -------------------------------------------------------
 void Conjunto::remover(int x) {
-    // Encontrar índice i onde elementos[i] == x
-    // elementos[i] = elementos[tam-1]; tam--
-    // Se não encontrar, retornar sem fazer nada
+    for (int i = 0; i < tam; ++i) {
+        if (elementos[i] == x) {
+            elementos[i] = elementos[tam - 1];
+            tam--;
+            return;
+        }
+    }
 }
 
 // -------------------------------------------------------
 // TODO 2.8 — tamanho
 // -------------------------------------------------------
 int Conjunto::tamanho() const {
-    // return tam
+    return tam;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 2 — Cardinalidade  ~A
 // -------------------------------------------------------
 int Conjunto::operator~() const {
-    // TODO 2.9: return tam
+    return tam;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 3 — Pertinência  A << x
 // -------------------------------------------------------
 bool Conjunto::operator<<(int x) const {
-    // TODO 2.10: return pertence(x)
+    return pertence(x);
 }
 
 // -------------------------------------------------------
 // Sobrecarga 4 — Inserção  A += x
 // -------------------------------------------------------
 Conjunto& Conjunto::operator+=(int x) {
-    // TODO 2.11: adicionar(x); return *this
+    adicionar(x);
+    return *this;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 5 — Igualdade  A == B
 // -------------------------------------------------------
 bool Conjunto::operator==(const Conjunto& outro) const {
-    // TODO 2.12:
-    // Se tam != outro.tam: return false
-    // Para cada elemento de *this:
-    //   Se !outro.pertence(elem): return false
-    // return true
+    if (tam != outro.tam) {
+        return false;
+    }
+    for (int i = 0; i < tam; ++i) {
+        if (!outro.pertence(elementos[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool Conjunto::operator!=(const Conjunto& outro) const {
@@ -117,53 +144,72 @@ bool Conjunto::operator!=(const Conjunto& outro) const {
 // Sobrecarga 6 — Subconjunto  A <= B
 // -------------------------------------------------------
 bool Conjunto::operator<=(const Conjunto& outro) const {
-    // TODO 2.13:
-    // Para cada elemento de *this:
-    //   Se !outro.pertence(elem): return false
-    // return true
+    for (int i = 0; i < tam; ++i) {
+        if (!outro.pertence(elementos[i])) {
+            return false;
+        }
+    }
+    return true;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 7 — União  A | B
 // -------------------------------------------------------
 Conjunto Conjunto::operator|(const Conjunto& outro) const {
-    // TODO 2.14:
-    // Conjunto resultado
-    // Adicionar todos os elementos de *this
-    // Para cada elemento de outro: se não pertence, adicionar
-    // return resultado
+    Conjunto resultado(cap + outro.cap);
+    for (int i = 0; i < tam; ++i) {
+        resultado.adicionar(elementos[i]);
+    }
+    for (int i = 0; i < outro.tam; ++i) {
+        if (!resultado.pertence(outro.elementos[i])) {
+            resultado.adicionar(outro.elementos[i]);
+        }
+    }
+    return resultado;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 8 — Interseção  A & B
 // -------------------------------------------------------
 Conjunto Conjunto::operator&(const Conjunto& outro) const {
-    // TODO 2.15:
-    // Conjunto resultado
-    // Para cada elemento de *this:
-    //   Se outro.pertence(elem): resultado.adicionar(elem)
-    // return resultado
+    Conjunto resultado;
+    for (int i = 0; i < tam; ++i) {
+        if (outro.pertence(elementos[i])) {
+            resultado.adicionar(elementos[i]);
+        }
+    }
+    return resultado;
 }
 
 // -------------------------------------------------------
 // Sobrecarga 9 — Diferença  A - B
 // -------------------------------------------------------
 Conjunto Conjunto::operator-(const Conjunto& outro) const {
-    // TODO 2.16:
-    // Conjunto resultado
-    // Para cada elemento de *this:
-    //   Se !outro.pertence(elem): resultado.adicionar(elem)
-    // return resultado
+    Conjunto resultado;
+    for (int i = 0; i < tam; ++i) {
+        if (!outro.pertence(elementos[i])) {
+            resultado.adicionar(elementos[i]);
+        }
+    }
+    return resultado;
 }
 
 // -------------------------------------------------------
 // Impressão
 // -------------------------------------------------------
 std::ostream& Conjunto::imprimir(std::ostream& os) const {
-    // TODO 2.17:
-    // Formato: { 1, 3, 5, 7 }
-    // Se vazio: { }
-    // Não colocar vírgula após o último elemento
+    os << "{ ";
+    for (int i = 0; i < tam; ++i) {
+        os << elementos[i];
+        if (i < tam - 1) {
+            os << ", ";
+        }
+    }
+    if (tam > 0) {
+        os << " ";
+    }
+    os << "}";
+    return os;
 }
 
 // Função livre — operador de saída
