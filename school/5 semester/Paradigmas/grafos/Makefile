@@ -7,7 +7,7 @@ TARGET  = programa
 all: $(TARGET)
 
 $(TARGET):
-    $(CC) $(FLAGS) $(SRC) -o $(TARGET)
+	$(CC) $(FLAGS) $(SRC) -o $(TARGET)
 
 clean:
-    rm -f $(TARGET)
+	rm -f $(TARGET)
