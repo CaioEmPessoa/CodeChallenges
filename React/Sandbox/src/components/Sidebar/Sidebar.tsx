@@ -1,8 +1,9 @@
 import SidebarSection from "./SidebarSection"
+import styles from "./Sidebar.module.css"
 
 function Sidebar() {
     return(
-        <div>
+        <div className={styles.sidebar}>
             <SidebarSection title="Meus sites favs:" urls={[
                     {text:"git.gay", href: "https://git.gay"},
                     {text:"minecraft", href: "https://minecraft.com"},
