@@ -1,16 +1,28 @@
 
-interface Components{
+import styles from "./SidebarSection.module.css"
+
+interface SidebarUrls{
     href: string;
     text: string;
 }
 
-function SidebarSection(title:string, components:Components){
-    const title_sz:Number = title.length
+interface SidebarSectionProps{
+    title         : string;
+    urls          : Array<SidebarUrls>
+    bottomBorder ?: Boolean
+}
+
+function SidebarSection({title, urls, bottomBorder=true}:SidebarSectionProps){
+
+    const sidebarUrls = urls.map(url =>
+        <a href={url.href} className={styles.url} >{url.text}</a>
+    );
 
     return(
         <div>
-            <title>{title} - {title_sz.toString()}</title>
-            <a href={components.href}>{components.text}</a>
+            <h3 className={styles.title} >{title}</h3>
+            {sidebarUrls}
+            {bottomBorder ? <hr/> : ""}
         </div>
     )
 
