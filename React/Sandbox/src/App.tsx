@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Sidebar/>
-      <Content></Content>
+      <Content/>
 
     </>
   )

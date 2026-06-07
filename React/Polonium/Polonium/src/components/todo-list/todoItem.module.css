@@ -1,0 +1,8 @@
+
+.todoItem {
+    color:pink
+}
+
+.todoItemFinished{
+    text-decoration: line-through
+}

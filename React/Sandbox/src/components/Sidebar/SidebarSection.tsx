@@ -12,6 +12,7 @@ interface SidebarSectionProps{
     bottomBorder ?: Boolean
 }
 
+
 function SidebarSection({title, urls, bottomBorder=true}:SidebarSectionProps){
 
     const sidebarUrls = urls.map(url =>
