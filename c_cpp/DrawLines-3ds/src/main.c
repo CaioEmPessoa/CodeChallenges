@@ -53,8 +53,6 @@ int main(int argc, char* argv[])
 	u32 kDownOld = 0, kHeldOld = 0;
 	int posXOld = 0, posYOld = 0;
 
-	bool commandsValid = false;
-
 	// Create screens
 	Screens screens = {
 		.top    = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT),
@@ -69,7 +67,11 @@ int main(int argc, char* argv[])
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		// START DRAWING
-		LinesSpace(screens, commandsValid);
+		if (algo == 0) {
+			AlgoChoice(screens, commandsValid);
+		} else {
+			LinesSpace(screens, commandsValid);
+		};
 
     	selectedScreen = NONE;
 

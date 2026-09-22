@@ -17,10 +17,14 @@ static bool cursorBot = false; // if cursor (touch) is on bottom or top screen
 #define ARRAY_LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 #define UNUSED(x) (void)(x)
 
+bool commandsValid = false;
+
 // App-specific globals
 
 #define LINES_AMMT 100
 
+
 static int topSqrSize = 10; // top screen sqr size
 static int btnSqrSize = 10; // bottom screen sqr size
 
+int algo = 0;

@@ -28,3 +28,16 @@ void registerLineTouch(parameter_t* params, int param_count)
 		tmpLine.end_x = 0; tmpLine.end_y = 0;
 	}
 }
+
+void removeLinesCommand(parameter_t* params, int param_count)
+{
+	removeLines();
+}
+
+void setAlgo(parameter_t* params, int param_count)
+{
+	algo = params[0].value.int_val;
+
+	commandsValid = false;
+	clear_button_commands();
+}
