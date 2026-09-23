@@ -137,6 +137,7 @@ void clear_commands() {
     clear_button_commands();
 }
 
+
 void checkTouchClick() // check and execute if touch is on one of squares.
 {
     int* res = drawSquare(deconvertPosInScreen('w', touch.px, BOTTOM), deconvertPosInScreen('h', touch.py, BOTTOM), 5, 5, C2D_Color32(0, 255, 0, 255));

@@ -11,15 +11,17 @@
 // global variables
 #include "global.h"
 
+// entity classes
+#include "entity/coords.h"
+#include "entity/lines.h"
+#include "entity/cubes.h"
+
 // colors and inputs that entitys may depend on
 #include "3dStarter/general.h"
 #include "3dStarter/colors.h"
 #include "3dStarter/drawing.h"
 #include "3dStarter/inputs.h"
 // #include "3dStarter/inputs.h"
-
-// entity classes
-#include "entity/lines.h"
 
 // important helpers. draw basic objects, complex, specific math etc
 #include "drawing_obj.h"
@@ -69,8 +71,12 @@ int main(int argc, char* argv[])
 		// START DRAWING
 		if (algo == 0) {
 			AlgoChoice(screens, commandsValid);
-		} else {
+		}
+		else if (algo == 1) {
 			LinesSpace(screens, commandsValid);
+		}
+		else if (algo == 2) {
+			CubesSpace(screens, commandsValid);
 		};
 
     	selectedScreen = NONE;

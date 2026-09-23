@@ -22,6 +22,7 @@ bool commandsValid = false;
 // App-specific globals
 
 #define LINES_AMMT 100
+#define CUBES_AMMT 100
 
 
 static int topSqrSize = 10; // top screen sqr size

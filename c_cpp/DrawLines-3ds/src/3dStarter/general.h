@@ -1,5 +1,5 @@
 
-// convert start position from top-left to middle
+// convert start position from middle to top-left
 // TODO: Change this to use screen_type variable type insted
 int convertPos(char type, int pos)
 {

@@ -11,10 +11,19 @@ Line tmpLine;
 Line lines[LINES_AMMT];
 
 void addNewLine(Line line) {
-    lines[lastLineIndex] = line;
     lastLineIndex++;
+
+    if (lastLineIndex >= LINES_AMMT)
+        lastLineIndex = 0;
+
+    lines[lastLineIndex] = line;
 }
 
 void removeLines() {
+    lastLineIndex = 0;
     memset(lines, 0, sizeof lines);
+}
+
+void clearTmp() {
+    memset(&tmpLine, 0, sizeof(tmpLine));
 }
