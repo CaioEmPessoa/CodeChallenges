@@ -1,5 +1,4 @@
 
-#include <stdio.h>
 void clearScene(Screens screens) {
     C2D_TargetClear(screens.top, getColor("clear"));
     C2D_TargetClear(screens.bottom, getColor("clear"));
@@ -8,14 +7,12 @@ void clearScene(Screens screens) {
 
 }
 
-void AlgoChoice(Screens screens, bool commandsValid) {
+void AlgoChoice(Screens screens, bool commandsValid, C2D_TextBuf textBuffer) {
     clearScene(screens);
 
     // ----- TOP SCREEN -----
     C2D_SceneBegin(screens.top);
     selectedScreen = TOP;
-
-    C2D_TextBuf textBuffer = C2D_TextBufNew(128);
 
     int* mainTitle = drawText(-60, 50, "Escolha o algoritimo:", textBuffer, 0.5);
 
@@ -35,7 +32,7 @@ void AlgoChoice(Screens screens, bool commandsValid) {
      }
 }
 
-void LinesSpace(Screens screens, bool commandsValid) {
+void LinesSpace(Screens screens, bool commandsValid, C2D_TextBuf textBuffer) {
     clearScene(screens);
 
     // ----- TOP SCREEN -----
@@ -52,29 +49,19 @@ void LinesSpace(Screens screens, bool commandsValid) {
     // Drawing elements
     int* background = drawSquare(-160, 120, 320, 240, getColor("pink"));
 
-    C2D_TextBuf textBuffer = C2D_TextBufNew(128);
-
     drawText(90, -95,  "B - Sair", textBuffer, 0.5);
     drawText(90, -105, "X - Limpar", textBuffer, 0.5);
-
-    // if (tmpLine.start_x != 0) {
-    //     int* intialPos = drawSquare(deconvertPos('w', touch.px)-2, deconvertPos('h', touch.py)+5, 10, 10, getColor("purple"));
-    // }
-
-    // if (!tmpLine.end_x) {
-    //     int* intialPos = drawSquare(deconvertP172.20.20.194os('w', touch.px)-2, deconvertPos('h', touch.py)+5, 10, 10, getColor("purple"));
-    // }
 
     for (int i=0; i<=lastLineIndex; i++) {
         Line cLine = lines[i]; // c = current
 
-        drawLine(
+        drawLineBresenham(
             deconvertPos('w', cLine.start_x),
             deconvertPos('h', cLine.start_y),
             deconvertPos('w', cLine.end_x),
             deconvertPos('h', cLine.end_y),
             getColor("black"),
-            10
+            7
         );
     }
 
@@ -90,16 +77,16 @@ void LinesSpace(Screens screens, bool commandsValid) {
         );
         store_touch_command(background, registerLineTouch, NULL, 0 );
     }
+
+    free(background);
 }
 
-void CubesSpace(Screens screens, bool commandsValid) {
+void CubesSpace(Screens screens, bool commandsValid, C2D_TextBuf textBuffer) {
     clearScene(screens);
 
     // ----- TOP SCREEN -----
     C2D_SceneBegin(screens.top);
     selectedScreen = TOP;
-
-    C2D_TextBuf textBuffer = C2D_TextBufNew(2048);
 
     drawText(-180, 80, "Coordenadas do Cubo:", textBuffer, 1);
 
@@ -138,32 +125,32 @@ void CubesSpace(Screens screens, bool commandsValid) {
             1, (char*[]){"KEY_DDOWN"}, 1, false
         );
         store_button_command(
+            scaleCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 1}},
+            1, (char*[]){"KEY_CPAD_DOWN"}, 1, true
+        );
+        store_button_command(
             scaleCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 2}},
             1, (char*[]){"KEY_DUP"}, 1, false
         );
         store_button_command(
-            scaleCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 1}},
-            1, (char*[]){"KEY_CSTICK_DOWN"}, 1, true
-        );
-        store_button_command(
             scaleCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 2}},
-            1, (char*[]){"KEY_CSTICK_UP"}, 1, true
+            1, (char*[]){"KEY_CPAD_UP"}, 1, true
         );
         store_button_command(
             rotateCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 1}},
             1, (char*[]){"KEY_L"}, 1, false
         );
         store_button_command(
+            rotateCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 1}},
+            1, (char*[]){"KEY_CPAD_LEFT"}, 1, true
+        );
+        store_button_command(
             rotateCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 2}},
             1, (char*[]){"KEY_R"}, 1, false
         );
         store_button_command(
-            rotateCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 1}},
-            1, (char*[]){"KEY_CSTICK_LEFT"}, 1, true
-        );
-        store_button_command(
             rotateCube, &(parameter_t){.type = PARAM_CHAR, .value = {.int_val = 2}},
-            1, (char*[]){"KEY_CSTICK_RIGHT"}, 1, true
+            1, (char*[]){"KEY_CPAD_RIGHT"}, 1, true
         );
     }
 
@@ -174,23 +161,18 @@ void CubesSpace(Screens screens, bool commandsValid) {
     // Drawing elements
     int* background = drawSquare(-160, 120, 320, 240, getColor("purple"));
 
-    int* commandsHud1 = drawTextQuick(90, -95,  "B - Sair", 0.5);
-    int* commandsHud2 = drawTextQuick(90, -105, "X - Limpar", 0.5);
+    drawText(90, -95,  "B - Sair", textBuffer, 0.5);
+    drawText(90, -105, "X - Limpar", textBuffer, 0.5);
 
-    // if (tmpLine.start_x != 0) {
-    //     int* intialPos = drawSquare(deconvertPos('w', touch.px)-2, deconvertPos('h', touch.py)+5, 10, 10, getColor("purple"));
-    // }
-
-    // if (!tmpLine.end_x) {
-    //     int* intialPos = drawSquare(deconvertP172.20.20.194os('w', touch.px)-2, deconvertPos('h', touch.py)+5, 10, 10, getColor("purple"));
-    // }
-
-    // cubePreview
-    drawCube(tmpCube, tmpCubeCurrentStep);
+    // PREVIEWs
+    // Cube preview
+    drawCube(tmpCube, tmpCubeCurrentStep, getColor("black"), getColor("clear"));
+    if (tmpCubeCurrentStep == 1)
+        drawSquare(tmpCube.top_left.x-3, tmpCube.top_left.y-3, 6, 6, getColor("green"));
 
     for (int i=0; i<=lastCubeIndex; i++) {
         Cube cCube = cubes[i]; // c = current
-        drawCube(cCube, 5);
+        drawCube(cCube, 6, getColor("black"), getColor("pink"));
     }
 
     // Commands
@@ -207,6 +189,39 @@ void CubesSpace(Screens screens, bool commandsValid) {
             removeCubesCommand, NULL,
             0, (char*[]){ "KEY_X"}, 1, false
         );
+
+        // DPAD move point
+        store_button_command(
+            registerCubeVerticesBtn, (parameter_t[]){
+                {.type = PARAM_CHAR, .value = {.int_val = 2}},
+                {.type = PARAM_CHAR, .value = {.int_val = 1}}
+            },
+            2, (char*[]){"KEY_DUP"}, 1, false
+        );
+        store_button_command(
+            registerCubeVerticesBtn, (parameter_t[]){
+                {.type = PARAM_CHAR, .value = {.int_val = 2}},
+                {.type = PARAM_CHAR, .value = {.int_val = 2}}
+            },
+            2, (char*[]){"KEY_DDOWN"}, 1, false
+        );
+        store_button_command(
+            registerCubeVerticesBtn, (parameter_t[]){
+                {.type = PARAM_CHAR, .value = {.int_val = 1}},
+                {.type = PARAM_CHAR, .value = {.int_val = 2}}
+            },
+            2, (char*[]){"KEY_DLEFT"}, 1, false
+        );
+        store_button_command(
+            registerCubeVerticesBtn, (parameter_t[]){
+                {.type = PARAM_CHAR, .value = {.int_val = 1}},
+                {.type = PARAM_CHAR, .value = {.int_val = 1}}
+            },
+            2, (char*[]){"KEY_DRIGHT"}, 1, false
+        );
+
         store_touch_command(background, registerCubeVerticesTouch, NULL, 0 );
     }
+
+    free(background);
 }

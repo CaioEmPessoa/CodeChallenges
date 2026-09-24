@@ -59,18 +59,12 @@ void registerCubeVertices(int x, int y)
 			tmpCube.bot_left.y = y;
 			break;
 	}
-
-	// Final step
-	if (tmpCubeCurrentStep >= 6) {
-		addNewCube(tmpCube);
-
-		tmpCubeCurrentStep = 0;
-		memset(&tmpCube, 0, sizeof(tmpCube));
-	}
 }
 void registerCubeVerticesTouch(parameter_t* params, int param_count)
 {
 	int distanceLimit = 10;
+
+	if (tmpCubeCurrentStep > 4) return;
 	if (touch.px == 0 || touch.py == 0) return;
 	if ((tmpLine.start_x >= touch.px-distanceLimit &&
 		tmpLine.start_x <= touch.px+distanceLimit) &&
@@ -78,11 +72,63 @@ void registerCubeVerticesTouch(parameter_t* params, int param_count)
 		tmpLine.start_y <= touch.py+distanceLimit)
 	) return;
 
-	registerCubeVertices(deconvertPosInScreen('w', touch.px, BOTTOM), deconvertPosInScreen('h', touch.py, BOTTOM));
+	registerCubeVertices(
+		deconvertPosInScreen('w', touch.px, BOTTOM),
+		deconvertPosInScreen('h', touch.py, BOTTOM)
+	);
+}
+// axis     : 1 = HORIZONTAL; 2 = VERTICAL.
+// direction: 1 = POSITIVE; 2 = NEGATIVE.
+void registerCubeVerticesBtn(parameter_t* params, int param_count)
+{
+	if (tmpCubeCurrentStep > 4) return;
+
+	int axis      = params[0].value.int_val;
+	int direction = params[1].value.int_val;
+
+	int ammt = direction == 1 ? +1 : -1;
+
+	if (axis == 1) {
+		switch (tmpCubeCurrentStep) {
+			case (1):
+				tmpCube.top_left.x += ammt;
+				break;
+			case (2):
+				tmpCube.top_right.x += ammt;
+				break;
+			case (3):
+				tmpCube.bot_right.x += ammt;
+				break;
+			case (4):
+				tmpCube.bot_left.x += ammt;
+				break;
+		}
+	} else if (axis == 2) {
+		switch (tmpCubeCurrentStep) {
+			case (1):
+				tmpCube.top_left.y += ammt;
+				break;
+			case (2):
+				tmpCube.top_right.y += ammt;
+				break;
+			case (3):
+				tmpCube.bot_right.y += ammt;
+				break;
+			case (4):
+				tmpCube.bot_left.y += ammt;
+				break;
+		}
+	}
 }
 void setNextStep(parameter_t* params, int param_count)
 {
 	tmpCubeCurrentStep++;
+	if (tmpCubeCurrentStep >= 6) {
+		addNewCube(tmpCube);
+
+		tmpCubeCurrentStep = 1;
+		memset(&tmpCube, 0, sizeof(tmpCube));
+	}
 }
 
 

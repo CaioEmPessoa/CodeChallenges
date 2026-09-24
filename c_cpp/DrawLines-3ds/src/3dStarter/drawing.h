@@ -16,6 +16,15 @@ int* drawSquare(int x, int y, int w, int h, u32 c)
     memcpy(pResult, result, sizeof(int) * 4);
     return pResult;
 }
+void drawSquareClean(int x, int y, int w, int h, u32 c)
+{
+	C2D_DrawRectangle(
+		convertPos('w', x),
+		convertPos('h', y),
+		0, w, h,
+		c, c, c, c
+	);
+}
 int* drawLine(int x0, int y0, int x1, int y1, u32 c, float thickness) {
 	C2D_DrawLine(
 		convertPos('w', x0), convertPos('h', y0),
@@ -51,18 +60,77 @@ int* drawText(float x, float y, char* text, C2D_TextBuf textBuffer, float fontSi
 	return 0;
 }
 
-int* drawTextQuick(float x, float y, char* text, float fontSize) {
-	C2D_TextBuf textBuffer = C2D_TextBufNew(128); // TODO: Change to dynamic value
+// --------------------- Activity draws
+void drawLineBresenham(int x0, int y0, int x1, int y1, u32 c, float thickness) {
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
 
-	drawText(x, y, text, textBuffer, fontSize);
+    while (true) {
+        drawSquareClean(x0, y0, thickness, thickness, c);
+        if (x0 == x1 && y0 == y1) break;
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x0 += sx; }
+        if (e2 <  dx) { err += dx; y0 += sy; }
+    }
 }
 
+typedef struct { float x, y; } Pt;
 
-// Activity draws
-#include <math.h>
+static int cmp_float(const void *a, const void *b) {
+    float fa = *(const float *)a, fb = *(const float *)b;
+    return (fa > fb) - (fa < fb);
+}
 
-int* drawCube(Cube cube, int step)
+void fillPolygon(Pt *verts, int n, u32 color) {
+    if (n < 3) return;
+
+    float ymin = verts[0].y, ymax = verts[0].y;
+    for (int i = 1; i < n; i++) {
+        if (verts[i].y < ymin) ymin = verts[i].y;
+        if (verts[i].y > ymax) ymax = verts[i].y;
+    }
+    int y0 = (int)floorf(ymin);
+    int y1 = (int)ceilf(ymax);
+
+    float *xs = malloc(sizeof(float) * (n + 1));
+    if (!xs) return;
+
+    for (int y = y0; y <= y1; y++) {
+        float yc = y + 0.5f;
+        int m = 0;
+
+        for (int i = 0; i < n; i++) {
+            Pt a = verts[i];
+            Pt b = verts[(i + 1) % n];
+
+            if ((a.y <= yc && b.y > yc) || (b.y <= yc && a.y > yc)) {
+                float t = (yc - a.y) / (b.y - a.y);
+                xs[m++] = a.x + t * (b.x - a.x);
+            }
+        }
+
+        if (m < 2) continue;
+        qsort(xs, m, sizeof(float), cmp_float);
+
+        for (int k = 0; k + 1 < m; k += 2) {
+            int xL = (int)ceilf(xs[k]);
+            int xR = (int)floorf(xs[k + 1]);
+            if (xR < xL) continue;
+            float w = (float)(xR - xL + 1);
+            drawSquareClean((float)xL, (float)y,
+                              w, 1, color);
+        }
+    }
+    free(xs);
+}
+int* drawCube(Cube cube, int step, u32 color, u32 fillColor)
 {
+
+	int cubeThickness = 4;
+
 	Coords
 	top_left=cube.top_left,
 	top_right=cube.top_right,
@@ -121,52 +189,48 @@ int* drawCube(Cube cube, int step)
 	}
 
 	if (step >= 2)
-		drawLine(
+		drawLineBresenham(
 			top_left.x,
 			top_left.y,
 			top_right.x,
 			top_right.y,
-			getColor("black"),
-			4
+			color,
+			cubeThickness
 		);
 	if (step >= 3)
-		drawLine(
+		drawLineBresenham(
 			top_right.x,
 			top_right.y,
 			bot_right.x,
 			bot_right.y,
-			getColor("black"),
-			4
+			color,
+			cubeThickness
 		);
 	if (step >= 4)
-		drawLine(
+		drawLineBresenham(
 			bot_right.x,
 			bot_right.y,
 			bot_left.x,
 			bot_left.y,
-			getColor("black"),
-			4
+			color,
+			cubeThickness
 		);
 	if (step >= 5)
-		drawLine(
+		drawLineBresenham(
 			bot_left.x,
 			bot_left.y,
 			top_left.x,
 			top_left.y,
-			getColor("black"),
-			4
+			color,
+			cubeThickness
 		);
-}
-
-void drawLineBasic(int x0, int y0, int x1, int y1, u32 c, float thickness) {
-	int x, y;
-	float a;
-	int valor;
-
-	a = (y1-y0) / (x1-x0);
-
-	for (x=x0; x<=x1; x++){
-		y = nearbyintf(y0 + a * (x - x0));
-		drawSquare(x, y, thickness, thickness, c);
+	if (step >= 6) {
+		Pt verts[4] = {
+			{ top_left.x,  top_left.y  },
+			{ top_right.x, top_right.y },
+			{ bot_right.x, bot_right.y },
+			{ bot_left.x,  bot_left.y  },
+		};
+		fillPolygon(verts, 4, getColor("black"));
 	}
 }

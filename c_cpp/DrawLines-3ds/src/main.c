@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
 
 // global variables
 #include "global.h"
@@ -61,22 +62,26 @@ int main(int argc, char* argv[])
 		.bottom = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT)
 	};
 
+	// Text buffer reused accross the application
+	C2D_TextBuf textBuffer = C2D_TextBufNew(256);
 
 	// Main loop
 	while (aptMainLoop())
 	{
+		C2D_TextBufClear(textBuffer);
+
 		// Render the scene
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		// START DRAWING
 		if (algo == 0) {
-			AlgoChoice(screens, commandsValid);
+			AlgoChoice(screens, commandsValid, textBuffer);
 		}
 		else if (algo == 1) {
-			LinesSpace(screens, commandsValid);
+			LinesSpace(screens, commandsValid, textBuffer);
 		}
 		else if (algo == 2) {
-			CubesSpace(screens, commandsValid);
+			CubesSpace(screens, commandsValid, textBuffer);
 		};
 
     	selectedScreen = NONE;
@@ -86,6 +91,8 @@ int main(int argc, char* argv[])
 		if(!commandsValid) {
 			// ADD_BUTTON_ELEMENT_CHAR(BUTTONS_ARRAY("KEY_Y"), flipScreens, 'n', false);
 		}
+
+		C2D_TargetClear(screens.bottom, getColor("clear"));
 
 		commandsValid = true;
 
